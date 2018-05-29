@@ -1,0 +1,32 @@
+{
+  "name": "serverless-rust",
+  "version": "0.0.0",
+  "description": "Serverless framework plugin for Rustlang applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/softprops/serverless-rust.git"
+  },
+  "keywords": [
+    "rustlang",
+    "aws",
+    "serverless",
+    "lambda"
+  ],
+  "author": "softprops",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/softprops/serverless-rust/issues"
+  },
+  "homepage": "https://github.com/softprops/serverless-rust#readme",
+  "dependencies": {
+    "fs-extra": "^5.0.0",
+    "serverless": "^1.27.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1"
+  }
+}
