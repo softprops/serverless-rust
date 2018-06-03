@@ -18,11 +18,6 @@ plugins:
   # this adds informs servleress to use
   # the serverless-rust plugin
   - serverless-rust
-custom:
-  # this section customizes the default
-  # serverless-rust plugin settings
-  rust:
-    cargoFlags: '--features python3-sys'
 # the follow is recommended for small deployment sizes
 # (faster uploads)
 package:
@@ -44,4 +39,19 @@ functions:
           path: /test
           method: GET
 
+```
+
+You can optionally adjust the default settings of the dockerized build env using
+a custom section of your serverless.yaml configuration
+
+
+```
+custom:
+  # this section customizes the default
+  # serverless-rust plugin settings
+  rust:
+    # flags passed to cargo
+    cargoFlags: '--features python3-sys'
+    # custom docker tag
+    dockerTag: 'some-custom-tag'
 ```

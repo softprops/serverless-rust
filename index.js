@@ -20,7 +20,8 @@ class ServerlessPlugin {
     };
     this.custom = Object.assign(
       {
-        cargoFlags: "",
+        cargoFlags: "--features python3-sys",
+        dockerTag: "0.0.0-rust-1.26.1"
       },
       this.serverless.service.custom && this.serverless.service.custom.rust || {}
     );
@@ -45,7 +46,7 @@ class ServerlessPlugin {
       [
         ...defaultArgs,
         ...customArgs,
-        'dougtangren/rust-crowbar'
+        `softprops/lambda-rust:${this.custom.dockerTag}`
       ],
       captureOutput ? {} : NO_OUTPUT_CAPTURE
     );
