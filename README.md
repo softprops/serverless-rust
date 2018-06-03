@@ -45,7 +45,7 @@ You can optionally adjust the default settings of the dockerized build env using
 a custom section of your serverless.yaml configuration
 
 
-```
+```yaml
 custom:
   # this section customizes the default
   # serverless-rust plugin settings
