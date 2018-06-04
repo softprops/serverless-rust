@@ -70,3 +70,4 @@ custom:
 ## 🏗️ serverless templates
 
 * lando api gateway application - https://github.com/softprops/serverless-lando
+* crowbar cloudwatch scheduled lambda application - https://github.com/softprops/serverless-crowbar
