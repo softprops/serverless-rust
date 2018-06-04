@@ -14,7 +14,7 @@ $ npm install serverless-rust@0.1.1
 
 💡 This serverless plugin assumes you are building Rustlang lambdas using the [lando](https://github.com/softprops/lando) or [crowbar](https://github.com/ilianaw/rust-crowbar) crates.
 
-Add the following to your serverless project's `serverless.yaml` file
+Add the following to your serverless project's `serverless.yml` file
 
 ```yaml
 service: demo
