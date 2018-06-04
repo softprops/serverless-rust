@@ -66,3 +66,7 @@ custom:
     # custom docker tag
     dockerTag: 'some-custom-tag'
 ```
+
+## 🏗️ serverless templates
+
+* lando api gateway application - https://github.com/softprops/serverless-lando
