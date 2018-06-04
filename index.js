@@ -74,3 +74,5 @@ class ServerlessPlugin {
     this.artifacts.forEach(fs.removeSync);
   }
 }
+
+module.exports = ServerlessPlugin;
