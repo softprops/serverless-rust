@@ -20,7 +20,7 @@ class ServerlessPlugin {
     };
     this.custom = Object.assign(
       {
-        cargoFlags: "--features python3-sys",
+        cargoFlags: "",
         dockerTag: "0.0.0-rust-1.26.1"
       },
       this.serverless.service.custom && this.serverless.service.custom.rust || {}

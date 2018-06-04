@@ -59,7 +59,7 @@ custom:
   # serverless-rust plugin settings
   rust:
     # flags passed to cargo
-    cargoFlags: '--features python3-sys'
+    cargoFlags: '--features lando/python3-sys'
     # custom docker tag
     dockerTag: 'some-custom-tag'
 ```
