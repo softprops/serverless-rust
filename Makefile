@@ -1,0 +1,2 @@
+publish:
+	@npm publish
