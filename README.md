@@ -49,6 +49,9 @@ functions:
 
 ```
 
+
+## 🖍️ customize
+
 You can optionally adjust the default settings of the dockerized build env using
 a custom section of your serverless.yaml configuration
 
