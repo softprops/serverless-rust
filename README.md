@@ -6,7 +6,13 @@
 
 ## 📦 Install
 
-💡 This plugin assumes you are building Rustlang lambdas using the [lando](https://github.com/softprops/lando) or [crowbar](https://github.com/ilianaw/rust-crowbar) crates.
+Install the plugin with npm
+
+```bash
+$ npm install serverless-rust@0.0.1
+```
+
+💡 This serverless plugin assumes you are building Rustlang lambdas using the [lando](https://github.com/softprops/lando) or [crowbar](https://github.com/ilianaw/rust-crowbar) crates.
 
 Add the following to your serverless project's `serverless.yaml` file
 
