@@ -3,7 +3,8 @@
 // https://serverless.com/blog/writing-serverless-plugins/
 
 const { spawnSync } = require('child_process');
-const fs = require('fs-extra');
+const { removeSync } = require('fs-extra');
+const copyFileSync = require('fs-copy-file-sync')
 const path = require('path');
 
 const NO_OUTPUT_CAPTURE = { stdio: ['ignore', process.stdout, process.stderr] };
@@ -21,7 +22,7 @@ class ServerlessPlugin {
     this.custom = Object.assign(
       {
         cargoFlags: "",
-        dockerTag: "0.1.0-rust-1.26.1"
+        dockerTag: "0.1.0-rust-1.26.2"
       },
       this.serverless.service.custom && this.serverless.service.custom.rust || {}
     );
@@ -65,13 +66,13 @@ class ServerlessPlugin {
       }
       const executablePath = path.resolve('target/lambda/release', crate + '.so');
       const targetPath = path.resolve(this.servicePath, crate + '.so');
-      fs.copyFileSync(executablePath, targetPath);
+      copyFileSync(executablePath, targetPath);
       this.artifacts.push(targetPath);
     })
   }
 
   clean() {
-    this.artifacts.forEach(fs.removeSync);
+    this.artifacts.forEach(removeSync);
   }
 }
 
