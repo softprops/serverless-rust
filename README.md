@@ -8,7 +8,7 @@
 Install the plugin with npm
 
 ```bash
-$ npm install serverless-rust@0.1.2
+$ npm install serverless-rust@0.1.3
 ```
 
 💡 This serverless plugin assumes you are building Rustlang lambdas using the [lando](https://github.com/softprops/lando) or [crowbar](https://github.com/ilianaw/rust-crowbar) rustlang crates.
