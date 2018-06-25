@@ -35,7 +35,7 @@ functions:
   test:
     # liblambda.handler is the default function name when
     # you follow lando/crowbar conventions
-    handler: liblamda.handler
+    handler: liblambda.handler
     # the following limits the function packaging
     # to just the resulting binary
     package:
