@@ -8,7 +8,7 @@
 Install the plugin with npm
 
 ```bash
-$ npm install serverless-rust@0.1.3
+$ npm install serverless-rust@0.1.4
 ```
 
 💡 This serverless plugin assumes you are building Rustlang lambdas using the [lando](https://github.com/softprops/lando) or [crowbar](https://github.com/ilianaw/rust-crowbar) rustlang crates.
@@ -64,6 +64,34 @@ custom:
     # custom docker tag
     dockerTag: 'some-custom-tag'
 ```
+
+### 🎨 Per function customization
+
+If your serverless project contains multiple functions, you may sometimes
+need to customize the options above at the function level. You can do this
+by defining a `rust` key with the same options inline in your function
+specficiation.
+
+```yaml
+functions:
+  test:
+    rust:
+      # function specific flags passed to cargo
+      cargoFlags: '--features ...'
+    # liblambda.handler is the default function name when
+    # you follow lando/crowbar conventions
+    handler: liblambda.handler
+    # the following limits the function packaging
+    # to just the resulting binary
+    package:
+      include:
+        - liblambda.so
+    events:
+      - http:
+          path: /test
+          method: GET
+```
+
 
 ## 🏗️ serverless templates
 
