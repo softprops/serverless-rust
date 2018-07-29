@@ -1,3 +1,7 @@
+# 0.1.4 (unreleased)
+
+* bump lambda rust docker version to 0.1.0-rust-1.27.2
+
 # 0.1.3
 
 * bump lambda rust docker version to 0.1.0-rust-1.27.0
