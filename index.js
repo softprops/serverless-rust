@@ -52,12 +52,13 @@ class ServerlessPlugin {
       // --features python3-sys, ect
       customArgs.push('-e', `CARGO_FLAGS=${cargoFlags}`);
     };
+    const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
     return spawnSync(
       'docker',
       [
         ...defaultArgs,
         ...customArgs,
-        `softprops/lambda-rust:${this.custom.dockerTag}`
+        `softprops/lambda-rust:${dockerTag}`
       ],
       captureOutput ? {} : NO_OUTPUT_CAPTURE
     );
