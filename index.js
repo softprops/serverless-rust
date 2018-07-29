@@ -1,6 +1,7 @@
 'use strict';
 
 // https://serverless.com/blog/writing-serverless-plugins/
+// https://serverless.com/framework/docs/providers/aws/guide/plugins/
 
 const { spawnSync } = require('child_process');
 const { removeSync } = require('fs-extra');
@@ -26,6 +27,14 @@ class ServerlessPlugin {
       },
       this.serverless.service.custom && this.serverless.service.custom.rust || {}
     );
+
+    // By default, Serverless examines node_modules to figure out which
+    // packages there are from dependencies versus devDependencies of a
+    // package. While there will always be a node_modules due to Serverless
+    // and this plugin being installed, it will be excluded anyway.
+    // Therefore, the filtering can be disabled to speed up (~3.2s) the process.
+    this.serverless.service.package.excludeDevDependencies = false;
+
     this.artifacts = [];
   }
 
