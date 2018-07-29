@@ -45,7 +45,6 @@ functions:
       - http:
           path: /test
           method: GET
-
 ```
 
 
