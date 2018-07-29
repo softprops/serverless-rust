@@ -38,7 +38,7 @@ class ServerlessPlugin {
     this.artifacts = [];
   }
 
-  runDocker(args, captureOutput) {
+  runDocker(funcArgs, captureOutput) {
     const defaultArgs = [
       'run',
       '--rm',
@@ -47,9 +47,10 @@ class ServerlessPlugin {
       `-v`, `${process.env['HOME']}/.cargo/git:/root/.cargo/git`,
     ];
     const customArgs = [];
-    if (this.custom.cargoFlags) {
+    const cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
+    if (cargoFlags) {
       // --features python3-sys, ect
-      customArgs.push('-e', `CARGO_FLAGS=${this.custom.cargoFlags}`);
+      customArgs.push('-e', `CARGO_FLAGS=${cargoFlags}`);
     };
     return spawnSync(
       'docker',
@@ -68,7 +69,7 @@ class ServerlessPlugin {
       const func = service.getFunction(funcName);
       const [crate, fn] = func.handler.split('.');
       this.serverless.cli.log(`Building native Rust ${func.handler} func...`);
-      const res = this.runDocker();
+      const res = this.runDocker(func.rust);
       if (res.error || res.status > 0) {
         this.serverless.cli.log(`Dockerized Rust build encountered an error.`);
         throw new Error(res.error);

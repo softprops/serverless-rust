@@ -2,6 +2,20 @@
 
 * bump lambda rust docker version to 0.1.0-rust-1.27.2
 * speed up deployments by ~3.2 seconds by disabling excludeDevDependencies. it's on by default but it's not useful for for Rust focused services
+* the `custom.rust` config object can be overrided at the function level
+
+```yaml
+functions:
+  hello:
+    rust:
+      cargoFlags: '--features ...'
+    handler: liblambda.handler
+    package:
+      include:
+        - liblambda.so
+    events:
+      - schedule: rate(5 minutes)
+```
 
 # 0.1.3
 
