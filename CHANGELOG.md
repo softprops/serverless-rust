@@ -1,3 +1,8 @@
+# ⚡ 0.1.5
+
+* ensure only a unique set of artifacts are collected for cleanup
+* Allocate a docker pseudo-tty so that process signals are forwarded (Keyboard interrupts stop docker process)
+
 # ⚡ 0.1.4
 
 * bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.1.0-rust-1.27.2, to make the new default Rust 1.27.2 (the latest release of Rust at this time)
