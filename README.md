@@ -96,4 +96,5 @@ functions:
 ## 🏗️ serverless templates
 
 * lando api gateway application - https://github.com/softprops/serverless-lando
+* multi function lando api gateway application - https://github.com/softprops/serverless-multi-lando
 * crowbar cloudwatch scheduled lambda application - https://github.com/softprops/serverless-crowbar
