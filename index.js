@@ -35,13 +35,15 @@ class ServerlessPlugin {
     // Therefore, the filtering can be disabled to speed up (~3.2s) the process.
     this.serverless.service.package.excludeDevDependencies = false;
 
-    this.artifacts = [];
+    // represented as an object for unique keys
+    this.artifacts = {};
   }
 
   runDocker(funcArgs, captureOutput) {
     const defaultArgs = [
       'run',
       '--rm',
+      '-t',
       `-v`, `${this.servicePath}:/code`,
       `-v`, `${process.env['HOME']}/.cargo/registry:/root/.cargo/registry`,
       `-v`, `${process.env['HOME']}/.cargo/git:/root/.cargo/git`,
@@ -78,12 +80,13 @@ class ServerlessPlugin {
       const executablePath = path.resolve('target/lambda/release', crate + '.so');
       const targetPath = path.resolve(this.servicePath, crate + '.so');
       copyFileSync(executablePath, targetPath);
-      this.artifacts.push(targetPath);
+      // only the keys matters
+      this.artifacts[targetPath] = null;
     })
   }
 
   clean() {
-    this.artifacts.forEach(removeSync);
+    Object.keys(this.artifacts).forEach(removeSync);
   }
 }
 
