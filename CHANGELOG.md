@@ -1,3 +1,7 @@
+# ⚡ 0.1.6
+
+* bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.1.0-rust-1.28.0, to make the new default Rust 1.28.0 (the latest release of Rust at this time)
+
 # ⚡ 0.1.5
 
 * ensure only a unique set of artifacts are collected for cleanup

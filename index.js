@@ -23,7 +23,7 @@ class ServerlessPlugin {
     this.custom = Object.assign(
       {
         cargoFlags: "",
-        dockerTag: "0.1.0-rust-1.27.2"
+        dockerTag: "0.1.0-rust-1.28.0"
       },
       this.serverless.service.custom && this.serverless.service.custom.rust || {}
     );

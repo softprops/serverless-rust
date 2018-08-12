@@ -1,6 +1,6 @@
 {
   "name": "serverless-rust",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Serverless framework plugin for Rustlang applications",
   "main": "index.js",
   "scripts": {
