@@ -1,6 +1,6 @@
 {
   "name": "serverless-rust",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Serverless framework plugin for Rustlang applications",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   "dependencies": {
     "fs-copy-file-sync": "^1.1.1",
     "fs-extra": "^5.0.0",
-    "serverless": "^1.32.0"
+    "serverless": "^1.33.2"
   },
   "devDependencies": {
     "eslint": "^4.19.1"

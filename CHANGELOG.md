@@ -1,3 +1,8 @@
+# ⚡ 0.1.7
+
+* bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.1.0-rust-1.30.1, to make the new default Rust 1.30.1 (the latest release of Rust at this time)
+* bumb serverless version to [1.33.2](https://github.com/serverless/serverless/blob/master/CHANGELOG.md#1332-18112018) ( the latest serverless release at this time)
+
 # ⚡ 0.1.6
 
 * bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.1.0-rust-1.28.0, to make the new default Rust 1.28.0 (the latest release of Rust at this time)
