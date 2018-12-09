@@ -8,7 +8,7 @@
 Install the plugin with npm
 
 ```bash
-$ npm install serverless-rust@0.1.6
+$ npm install serverless-rust
 ```
 
 💡 This serverless plugin assumes you are building Rustlang lambdas using the [lando](https://github.com/softprops/lando) or [crowbar](https://github.com/ilianaw/rust-crowbar) rustlang crates.
@@ -20,27 +20,20 @@ service: demo
 provider:
   name: aws
   # crowbar and lando integrate with aws lambda's python3.6 runtime
-  runtime: python3.6
+  runtime: rust
 plugins:
   # this adds informs servleress to use
   # the serverless-rust plugin
   - serverless-rust
-# the follow is recommended for small deployment sizes
-# (faster uploads)
+# creates one artifact for each function
 package:
   individually: true
-  exclude:
-    - ./**
 functions:
   test:
-    # liblambda.handler is the default function name when
-    # you follow lando/crowbar conventions
-    handler: liblambda.handler
-    # the following limits the function packaging
-    # to just the resulting binary
-    package:
-      include:
-        - liblambda.so
+    # handler value syntax is `{cargo-package}.{bin-name}`
+    # or `{bin-name}` for short when you are building a
+    # default bin for a given package.
+    handler: your-crate-name
     events:
       - http:
           path: /test
@@ -56,11 +49,11 @@ a custom section of your serverless.yaml configuration
 
 ```yaml
 custom:
-  # this section customizes the default
+  # this section allows for customization of the default
   # serverless-rust plugin settings
   rust:
     # flags passed to cargo
-    cargoFlags: '--features lando/python3-sys'
+    cargoFlags: '--features enable-awesome'
     # custom docker tag
     dockerTag: 'some-custom-tag'
 ```
@@ -77,15 +70,11 @@ functions:
   test:
     rust:
       # function specific flags passed to cargo
-      cargoFlags: '--features ...'
-    # liblambda.handler is the default function name when
-    # you follow lando/crowbar conventions
-    handler: liblambda.handler
-    # the following limits the function packaging
-    # to just the resulting binary
-    package:
-      include:
-        - liblambda.so
+      cargoFlags: '--features enable-awesome'
+    # handler value syntax is `{cargo-package}.{bin-name}`
+    # or `{bin-name}` for short when you are building a
+    # default bin for a given package.
+    handler: your-crate-name
     events:
       - http:
           path: /test
@@ -94,6 +83,12 @@ functions:
 
 
 ## 🏗️ serverless templates
+
+### 0.2.*
+
+* a minimal echo application - https://github.com/softprops/serverless-aws-rust
+
+### 0.1.*
 
 * lando api gateway application - https://github.com/softprops/serverless-lando
 * multi function lando api gateway application - https://github.com/softprops/serverless-multi-lando

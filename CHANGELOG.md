@@ -1,3 +1,12 @@
+# ⚡ 0.2.0 (unreleased)
+
+* port from `python3.6` runtime to `rust` which runs on the `provided` runtime under the covers
+* you can now deploy independent functions with `npx serverless deploy function -f func-name`
+* no longer have to be explicit about function binary to include, this plugin generates and configures the artifact (zip) file for you
+* no longer have to set default exclusion rules
+* can deploy `rust` runtime function side by side with other serverless runtime functions
+within the same service
+
 # ⚡ 0.1.7
 
 * bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.1.0-rust-1.30.1, to make the new default Rust 1.30.1 (the latest release of Rust at this time)
