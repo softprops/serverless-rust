@@ -5,14 +5,10 @@
 // https://github.com/softprops/lambda-rust/
 
 const { spawnSync } = require('child_process');
-//const { removeSync } = require('fs-extra');
-//const copyFileSync = require('fs-copy-file-sync')
 const path = require('path');
 
 const RUST_RUNTIME = 'rust';
-
 const BASE_RUNTIME = 'provided';
-
 const NO_OUTPUT_CAPTURE = { stdio: ['ignore', process.stdout, process.stderr] };
 
 /** assumes docker is on the host's execution path */
