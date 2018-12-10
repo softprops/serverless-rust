@@ -1,6 +1,6 @@
 # ⚡ 0.2.0
 
-* Switch the Lambda `python3.6` runtime to `rust` ( which runs on the `provided` runtime under the covers )
+* Switch from supporting the Lambda `python3.6` runtime to a new ✨ `rust` runtime ✨ ( which runs on the `provided` runtime under the covers )
 * you can now deploy independent functions with `npx serverless deploy function -f func-name`
 * you no longer have to be explicit about function binary to include, this plugin generates and configures the artifact (zip) file for you
 * you no longer have to set default exclusion rules
