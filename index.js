@@ -7,6 +7,7 @@
 const { spawnSync } = require('child_process');
 const path = require('path');
 
+const DEFAULT_DOCKER_TAG = '0.2.0-rust-1.31.0';
 const RUST_RUNTIME = 'rust';
 const BASE_RUNTIME = 'provided';
 const NO_OUTPUT_CAPTURE = { stdio: ['ignore', process.stdout, process.stderr] };
@@ -25,7 +26,7 @@ class RustPlugin {
     this.custom = Object.assign(
       {
         cargoFlags: "",
-        dockerTag: "0.2.0-rust-1.31.0"
+        dockerTag: DEFAULT_DOCKER_TAG
       },
       this.serverless.service.custom && this.serverless.service.custom.rust || {}
     );
@@ -94,7 +95,6 @@ class RustPlugin {
         return;
       }
       rustFunctionsFound = true;
-      // reserve `cargoPackage` for future support of cargo workspaces
       let [cargoPackage, binary] = func.handler.split('.');
       if (binary == undefined) {
         binary = cargoPackage;
@@ -105,12 +105,12 @@ class RustPlugin {
         this.serverless.cli.log(`Dockerized Rust build encountered an error: ${res.error} ${res.status}.`);
         throw new Error(res.error);
       }
-      // If all is well we should now have find a packaged compiled binary under target/lambda/release.
+      // If all went well, we should now have find a packaged compiled binary under `target/lambda/release`.
       //
       // The AWS "provided" lambda runtime requires executables to be named
       // "bootstrap" -- https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html
       //
-      // To avoid artifact name conflicts when we potentially have more than one function
+      // To avoid artifact nameing conflicts when we potentially have more than one function
       // we leverage the ability to declare a package artifact directly
       // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
       // for more information
