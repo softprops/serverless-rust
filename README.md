@@ -11,7 +11,7 @@ Install the plugin with npm
 $ npm install serverless-rust
 ```
 
-💡 This serverless plugin assumes you are building Rustlang lambdas using the [lando](https://github.com/softprops/lando) or [crowbar](https://github.com/ilianaw/rust-crowbar) rustlang crates.
+💡 This serverless plugin assumes you are building Rustlang lambdas targetting the AWS Lambda "provided" runtime. The [AWS Lambda Rust Runtime](https://github.com/awslabs/aws-lambda-rust-runtime) makes this easy.
 
 Add the following to your serverless project's `serverless.yml` file
 
@@ -19,7 +19,6 @@ Add the following to your serverless project's `serverless.yml` file
 service: demo
 provider:
   name: aws
-  # crowbar and lando integrate with aws lambda's python3.6 runtime
   runtime: rust
 plugins:
   # this adds informs servleress to use
@@ -45,7 +44,6 @@ functions:
 
 You can optionally adjust the default settings of the dockerized build env using
 a custom section of your serverless.yaml configuration
-
 
 ```yaml
 custom:
@@ -89,6 +87,8 @@ functions:
 * a minimal echo application - https://github.com/softprops/serverless-aws-rust
 
 ### 0.1.*
+
+Older versions targetted the python 3.6 AWS Lambda runtime.
 
 * lando api gateway application - https://github.com/softprops/serverless-lando
 * multi function lando api gateway application - https://github.com/softprops/serverless-multi-lando
