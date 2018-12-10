@@ -7,7 +7,7 @@
 
 Install the plugin with npm
 
-```bash
+```sh
 $ npm install serverless-rust
 ```
 
