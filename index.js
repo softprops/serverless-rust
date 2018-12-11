@@ -2,28 +2,31 @@
 
 // https://serverless.com/blog/writing-serverless-plugins/
 // https://serverless.com/framework/docs/providers/aws/guide/plugins/
+// https://github.com/softprops/lambda-rust/
 
 const { spawnSync } = require('child_process');
-const { removeSync } = require('fs-extra');
-const copyFileSync = require('fs-copy-file-sync')
 const path = require('path');
 
+const DEFAULT_DOCKER_TAG = '0.2.0-rust-1.31.0';
+const RUST_RUNTIME = 'rust';
+const BASE_RUNTIME = 'provided';
 const NO_OUTPUT_CAPTURE = { stdio: ['ignore', process.stdout, process.stderr] };
 
 /** assumes docker is on the host's execution path */
-class ServerlessPlugin {
+class RustPlugin {
   constructor(serverless, options) {
+
     this.serverless = serverless;
     this.options = options;
     this.servicePath = this.serverless.config.servicePath || '';
     this.hooks = {
       'before:package:createDeploymentArtifacts': this.build.bind(this),
-      'after:package:createDeploymentArtifacts': this.clean.bind(this),
+      'before:deploy:function:packageFunction': this.build.bind(this),
     };
     this.custom = Object.assign(
       {
         cargoFlags: "",
-        dockerTag: "0.1.0-rust-1.30.1"
+        dockerTag: DEFAULT_DOCKER_TAG
       },
       this.serverless.service.custom && this.serverless.service.custom.rust || {}
     );
@@ -34,12 +37,9 @@ class ServerlessPlugin {
     // and this plugin being installed, it will be excluded anyway.
     // Therefore, the filtering can be disabled to speed up (~3.2s) the process.
     this.serverless.service.package.excludeDevDependencies = false;
-
-    // represented as an object for unique keys
-    this.artifacts = {};
   }
 
-  runDocker(funcArgs, captureOutput) {
+  runDocker(funcArgs, cargoPackage) {
     const defaultArgs = [
       'run',
       '--rm',
@@ -49,9 +49,16 @@ class ServerlessPlugin {
       `-v`, `${process.env['HOME']}/.cargo/git:/root/.cargo/git`,
     ];
     const customArgs = [];
-    const cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
+    let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
+    if (cargoPackage != undefined) {
+      if (cargoFlags) {
+        cargoFlags = `${cargoFlags} -p ${cargoPackage}`
+      } else {
+        cargoFlags = ` -p ${cargoPackage}`;
+      }
+    }
     if (cargoFlags) {
-      // --features python3-sys, ect
+      // --features awesome-feature, ect
       customArgs.push('-e', `CARGO_FLAGS=${cargoFlags}`);
     };
     const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
@@ -62,32 +69,71 @@ class ServerlessPlugin {
         ...customArgs,
         `softprops/lambda-rust:${dockerTag}`
       ],
-      captureOutput ? {} : NO_OUTPUT_CAPTURE
+      NO_OUTPUT_CAPTURE
     );
+  }
+
+  functions() {
+    if (this.options.function) {
+        return [this.options.function];
+    } else {
+        return this.serverless.service.getAllFunctions();
+    }
   }
 
   build() {
     const service = this.serverless.service;
-    service.getAllFunctions().forEach(funcName => {
+    if (service.provider.name != 'aws') {
+      return;
+    }
+    let rustFunctionsFound = false
+    this.functions().forEach(funcName => {
       const func = service.getFunction(funcName);
-      const [crate, fn] = func.handler.split('.');
+      const runtime = func.runtime || service.provider.runtime;
+      if (runtime != RUST_RUNTIME) {
+        // skip functions which don't apply
+        return;
+      }
+      rustFunctionsFound = true;
+      let [cargoPackage, binary] = func.handler.split('.');
+      if (binary == undefined) {
+        binary = cargoPackage;
+      }
       this.serverless.cli.log(`Building native Rust ${func.handler} func...`);
-      const res = this.runDocker(func.rust);
+      const res = this.runDocker(func.rust, cargoPackage);
       if (res.error || res.status > 0) {
-        this.serverless.cli.log(`Dockerized Rust build encountered an error.`);
+        this.serverless.cli.log(`Dockerized Rust build encountered an error: ${res.error} ${res.status}.`);
         throw new Error(res.error);
       }
-      const executablePath = path.resolve('target/lambda/release', crate + '.so');
-      const targetPath = path.resolve(this.servicePath, crate + '.so');
-      copyFileSync(executablePath, targetPath);
-      // only the keys matters
-      this.artifacts[targetPath] = null;
-    })
-  }
+      // If all went well, we should now have find a packaged compiled binary under `target/lambda/release`.
+      //
+      // The AWS "provided" lambda runtime requires executables to be named
+      // "bootstrap" -- https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html
+      //
+      // To avoid artifact nameing conflicts when we potentially have more than one function
+      // we leverage the ability to declare a package artifact directly
+      // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
+      // for more information
+      const artifactPath =  path.join('target/lambda/release', binary + ".zip")
+      func.package = func.package || {};
+      func.package.artifact = artifactPath;
 
-  clean() {
-    Object.keys(this.artifacts).forEach(removeSync);
+      // Ensure the runtime is set to a sane value for other plugins
+      if (func.runtime == RUST_RUNTIME) {
+        func.runtime = BASE_RUNTIME
+      }
+    })
+    if (service.provider.runtime === RUST_RUNTIME) {
+      service.provider.runtime = BASE_RUNTIME;
+    }
+    if (!rustFunctionsFound) {
+      throw new Error(
+        `Error: no Rust functions found. ` +
+        `Use 'runtime: ${RUST_RUNTIME}' in global or ` +
+        `function configuration to use this plugin.`
+      );
+    }
   }
 }
 
-module.exports = ServerlessPlugin;
+module.exports = RustPlugin;
