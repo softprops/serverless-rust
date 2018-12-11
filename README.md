@@ -29,10 +29,10 @@ package:
   individually: true
 functions:
   test:
-    # handler value syntax is `{cargo-package}.{bin-name}`
-    # or `{bin-name}` for short when you are building a
+    # handler value syntax is `{cargo-package-name}.{bin-name}`
+    # or `{cargo-package-name}` for short when you are building a
     # default bin for a given package.
-    handler: your-crate-name
+    handler: your-cargo-package-name
     events:
       - http:
           path: /test
@@ -69,10 +69,10 @@ functions:
     rust:
       # function specific flags passed to cargo
       cargoFlags: '--features enable-awesome'
-    # handler value syntax is `{cargo-package}.{bin-name}`
-    # or `{bin-name}` for short when you are building a
+    # handler value syntax is `{cargo-package-name}.{bin-name}`
+    # or `{cargo-package-name}` for short when you are building a
     # default bin for a given package.
-    handler: your-crate-name
+    handler: your-cargo-package-name
     events:
       - http:
           path: /test
