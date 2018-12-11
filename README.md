@@ -88,7 +88,7 @@ functions:
 
 ### 0.1.*
 
-Older versions targetted the python 3.6 AWS Lambda runtime.
+Older versions targeted the python 3.6 AWS Lambda runtime and [rust crowbar](https://github.com/ilianaw/rust-crowbar) and [lando](https://github.com/softprops/lando) applications
 
 * lando api gateway application - https://github.com/softprops/serverless-lando
 * multi function lando api gateway application - https://github.com/softprops/serverless-multi-lando
