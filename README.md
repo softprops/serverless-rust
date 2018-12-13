@@ -85,6 +85,7 @@ functions:
 ### 0.2.*
 
 * a minimal echo application - https://github.com/softprops/serverless-aws-rust
+* a minimal http application - https://github.com/softprops/serverless-aws-rust-http
 
 ### 0.1.*
 
