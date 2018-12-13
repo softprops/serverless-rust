@@ -86,6 +86,7 @@ functions:
 
 * a minimal echo application - https://github.com/softprops/serverless-aws-rust
 * a minimal http application - https://github.com/softprops/serverless-aws-rust-http
+* a minimal example multi-function application - https://github.com/softprops/serverless-aws-rust-multi
 
 ### 0.1.*
 
