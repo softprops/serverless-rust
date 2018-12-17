@@ -1,1 +1,4 @@
 node_modules
+target
+tests/test-func/test-out.log
+.serverless
