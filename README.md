@@ -8,7 +8,7 @@
 Install the plugin with npm
 
 ```sh
-$ npm install serverless-rust
+$ npm i -D serverless-rust
 ```
 
 💡 This serverless plugin assumes you are building Rustlang lambdas targetting the AWS Lambda "provided" runtime. The [AWS Lambda Rust Runtime](https://github.com/awslabs/aws-lambda-rust-runtime) makes this easy.

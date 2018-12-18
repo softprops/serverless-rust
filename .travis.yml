@@ -1,3 +1,11 @@
 language: node_js
 node_js:
-  - '7'
+  - "node"
+
+services:
+  # start docker to enable lambda ci compatible build env
+  - docker
+
+script:
+  - npm test
+  - tests/test.sh
