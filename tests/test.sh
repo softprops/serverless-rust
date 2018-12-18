@@ -45,8 +45,8 @@ DIST=$(cd $HERE/..; echo $PWD)
 cd ${HERE}/test-func
 
 # install build deps
-npm install serverless --silent
-assert_success "it installs" npm install $DIST --silent
+npm i -D serverless --silent
+assert_success "it installs" npm i -D $DIST --silent
 
 # integration test `package` command
 assert_success "it packages" npx serverless package
