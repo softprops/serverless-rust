@@ -29,10 +29,12 @@ function assert_success() {
 function end_tests() {
     if ((FAILED > 0))
     then
-        echo -e "${RED}Run ${TESTS} tests, ${FAILED} failed.${NC}"
+        echo
+        echo -e "💀  ${RED}Run ${TESTS} tests, ${FAILED} failed.${NC}"
         exit $FAILED
     else
-        echo -e "${GREEN}${TESTS} tests passed.${NC}"
+        echo
+        echo -e "👌  ${GREEN}${TESTS} tests passed.${NC}"
         exit 0
     fi
 }
@@ -61,6 +63,6 @@ unzip -o  \
     -v /tmp/lambda:/var/task \
     lambci/lambda:provided < test-event.json | grep -v RequestId | grep -v '^\W*$' > test-out.log
 
-cat test-out.log
+assert_success "when invoked, it produces expected output" diff test-event.json test-out.log
 
 end_tests
