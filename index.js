@@ -39,11 +39,12 @@ class RustPlugin {
     this.serverless.service.package.excludeDevDependencies = false;
   }
 
-  runDocker(funcArgs, cargoPackage) {
+  runDocker(funcArgs, cargoPackage, binary) {
     const defaultArgs = [
       'run',
       '--rm',
       '-t',
+      '-e', `BIN=${binary}`,
       `-v`, `${this.servicePath}:/code`,
       `-v`, `${process.env['HOME']}/.cargo/registry:/root/.cargo/registry`,
       `-v`, `${process.env['HOME']}/.cargo/git:/root/.cargo/git`,
@@ -100,7 +101,7 @@ class RustPlugin {
         binary = cargoPackage;
       }
       this.serverless.cli.log(`Building native Rust ${func.handler} func...`);
-      const res = this.runDocker(func.rust, cargoPackage);
+      const res = this.runDocker(func.rust, cargoPackage, binary);
       if (res.error || res.status > 0) {
         this.serverless.cli.log(`Dockerized Rust build encountered an error: ${res.error} ${res.status}.`);
         throw new Error(res.error);
