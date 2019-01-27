@@ -1,4 +1,4 @@
-# 0.2.1
+# ⚡ 0.2.1
 
 - bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.0-rust-1.32.0, to make the new default Rust 1.32.0 (the latest release of Rust at this time)
 - bump serverless version to [`1.36.3`](https://github.com/serverless/serverless/releases/tag/v1.36.3)
