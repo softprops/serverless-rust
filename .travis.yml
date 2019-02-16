@@ -2,6 +2,13 @@ language: node_js
 node_js:
   - "node"
 
+# only build pushes to master
+# prs are build separately
+# https://docs.travis-ci.com/user/pull-requests/#how-pull-requests-are-built
+branches:
+  only:
+  - master
+
 services:
   # start docker to enable lambda ci compatible build env
   - docker
