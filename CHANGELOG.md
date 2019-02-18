@@ -1,4 +1,4 @@
-# ⚡ 0.2.2
+# ⚡ 0.3.0
 
 - bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.32.0, fixing a bug where cargo binaries named `bootstrap` weren't getting packaged. Reminder: this plugin renames binaries to `bootstrap` for the lambda runtime for you. You don't have do to this manually in your Cargo configuration. This also introduces an effiency in the way binaries are identified for packaging that may help some windows users.
 - bump serverless version to [`1.37.1`](https://github.com/serverless/serverless/releases/tag/v1.37.1)
