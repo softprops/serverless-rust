@@ -39,6 +39,7 @@ functions:
           method: GET
 ```
 
+> 💡 The Rust Lambda runtime requires a binary named `bootstrap`. This plugin renames the binary cargo builds to `bootstrap` for you before packaging. You do not need to do this manually in your Cargo configuration.
 
 ## 🖍️ customize
 

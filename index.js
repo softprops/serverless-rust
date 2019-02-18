@@ -7,7 +7,7 @@
 const { spawnSync } = require("child_process");
 const path = require("path");
 
-const DEFAULT_DOCKER_TAG = "0.2.0-rust-1.32.0";
+const DEFAULT_DOCKER_TAG = "0.2.1-rust-1.32.0";
 const RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
