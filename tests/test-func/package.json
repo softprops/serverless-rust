@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "serverless": "^1.38.0",
+    "serverless": "git://github.com/serverless/serverless.git#fe86fdee0f3bb07e0dbaee34888354e11b263c78",
     "serverless-rust": "file:../.."
   }
 }
