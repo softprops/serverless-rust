@@ -46,7 +46,6 @@ DIST=$(cd $HERE/..; echo $PWD)
 
 cd ${HERE}/test-func
 
-echo npm i -D $DIST --silent
 # install build deps
 assert_success "it installs with npm" \
     npm i -D $DIST --silent
