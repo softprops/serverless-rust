@@ -80,6 +80,29 @@ functions:
           method: GET
 ```
 
+## 🤸 usage
+
+Every [flow that serverless provides](https://serverless.com/framework/docs/providers/aws/guide/workflow/) should be work out of the box.
+
+### invoke your lambdas locally
+
+```sh
+$ npx serverless invoke local -f hello -d '{"hello":"world"}'
+```
+
+### deploy your lambdas to the cloud
+
+```sh
+$ npx serverless deploy
+```
+
+### invoke your lambas in the cloud directly
+
+```sh
+$ npx serverless invoke -f hello -d '{"hello":"world"}'
+```
+
+
 
 ## 🏗️ serverless templates
 

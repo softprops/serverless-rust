@@ -1,3 +1,14 @@
+# ⚡ 0.3.2 (unreleased)
+
+- ✨new support for invoking your lambdas locally.
+
+This decreases the turn around time to validate a change before
+without having to deploy it first
+
+```sh
+$ npx serverless invoke local -f foo -d '{"yes":"we can"}'
+```
+
 # ⚡ 0.3.1
 
 - bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.33.0
