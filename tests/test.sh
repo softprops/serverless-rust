@@ -84,6 +84,4 @@ assert_success "it supports serverless local invocation" \
 assert_success "when serverless invokes locally, it produces expected output" \
     diff test-local.json local-out.log
 
-#rm test-out.log
-
 end_tests
