@@ -9,6 +9,8 @@ without having to deploy it first
 $ npx serverless invoke local -f foo -d '{"yes":"we can"}'
 ```
 
+You can still use this plugin with older versions of serverless but `invoke local` will only work with `serverless@1.39.1` and above
+
 # ⚡ 0.3.1
 
 - bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.33.0
