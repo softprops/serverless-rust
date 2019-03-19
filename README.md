@@ -39,7 +39,7 @@ functions:
           method: GET
 ```
 
-> 💡 The Rust Lambda runtime requires a binary named `bootstrap`. This plugin renames the binary cargo builds to `bootstrap` for you before packaging. You do not need to do this manually in your Cargo configuration.
+> 💡 The Rust Lambda runtime requires a binary named `bootstrap`. This plugin renames the binary cargo builds to `bootstrap` for you before packaging. You do **not** need to do this manually in your Cargo configuration.
 
 ## 🖍️ customize
 
@@ -82,7 +82,7 @@ functions:
 
 ## 🤸 usage
 
-Every [flow that serverless provides](https://serverless.com/framework/docs/providers/aws/guide/workflow/) should be work out of the box.
+Every [serverless workflow command](https://serverless.com/framework/docs/providers/aws/guide/workflow/) should work out of the box.
 
 ### invoke your lambdas locally
 
@@ -102,6 +102,11 @@ $ npx serverless deploy
 $ npx serverless invoke -f hello -d '{"hello":"world"}'
 ```
 
+### view your lambdas logs
+
+```sh
+$ npx serverless logs -f hello
+```
 
 
 ## 🏗️ serverless templates
