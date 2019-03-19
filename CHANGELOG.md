@@ -1,4 +1,4 @@
-# ⚡ 0.3.2 (unreleased)
+# ⚡ 0.3.2
 
 - ✨new support for invoking your lambdas locally.
 
