@@ -20,7 +20,8 @@ class RustPlugin {
     this.servicePath = this.serverless.config.servicePath || "";
     this.hooks = {
       "before:package:createDeploymentArtifacts": this.build.bind(this),
-      "before:deploy:function:packageFunction": this.build.bind(this)
+      "before:deploy:function:packageFunction": this.build.bind(this),
+      'before:invoke:local:invoke': this.build.bind(this),
     };
     this.custom = Object.assign(
       {

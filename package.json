@@ -25,11 +25,11 @@
   "dependencies": {
     "fs-copy-file-sync": "^1.1.1",
     "fs-extra": "^7.0.1",
-    "serverless": "^1.37.1",
+    "serverless": "^1.39.1",
     "test": "^0.6.0"
   },
   "devDependencies": {
-    "eslint": "^5.14.0"
+    "eslint": "^5.15.3"
   },
   "files": [
     "index.js",
