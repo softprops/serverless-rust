@@ -116,6 +116,7 @@ $ npx serverless logs -f hello
 * a minimal echo application - https://github.com/softprops/serverless-aws-rust
 * a minimal http application - https://github.com/softprops/serverless-aws-rust-http
 * a minimal example multi-function application - https://github.com/softprops/serverless-aws-rust-multi
+* an example of a apigateway websocket application - https://github.com/softprops/serverless-aws-rust-websockets
 
 ### 0.1.*
 
