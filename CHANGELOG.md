@@ -1,3 +1,7 @@
+# ⚡ 0.3.4
+
+- bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.34.1 to gain [new rust 1.34.1 features](https://blog.rust-lang.org/2019/04/25/Rust-1.34.1.html).
+
 # ⚡ 0.3.3
 
 - bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.34.0 to gain [new rust 1.34.0 features](https://blog.rust-lang.org/2019/04/11/Rust-1.34.0.html).
