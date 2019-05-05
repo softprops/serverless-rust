@@ -12,6 +12,13 @@ const RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
 
+function includeInvokeHook(serverlessVersion) {
+  let [major, minor] = serverlessVersion.split('.')
+  let majorVersion = parseInt(major)
+  let minorVersion = parseInt(minor)
+  return majorVersion === 1 && minorVersion >= 38 && minorVersion < 40;
+}
+
 /** assumes docker is on the host's execution path */
 class RustPlugin {
   constructor(serverless, options) {
@@ -21,8 +28,10 @@ class RustPlugin {
     this.hooks = {
       "before:package:createDeploymentArtifacts": this.build.bind(this),
       "before:deploy:function:packageFunction": this.build.bind(this),
-      'before:invoke:local:invoke': this.build.bind(this),
     };
+    if (includeInvokeHook(serverless.version)) {
+      this.hooks['before:invoke:local:invoke'] = this.build.bind(this);
+    }
     this.custom = Object.assign(
       {
         cargoFlags: "",
@@ -89,7 +98,7 @@ class RustPlugin {
       const func = service.getFunction(funcName);
       const runtime = func.runtime || service.provider.runtime;
       if (runtime != RUST_RUNTIME) {
-        // skip functions which don't apply
+        // skip functions which don't apply to rust
         return;
       }
       rustFunctionsFound = true;
