@@ -5,6 +5,7 @@
 // https://github.com/softprops/lambda-rust/
 
 const { spawnSync } = require("child_process");
+const { homedir } = require("os");
 const path = require("path");
 
 const DEFAULT_DOCKER_TAG = "0.2.1-rust-1.34.1";
@@ -50,14 +51,15 @@ class RustPlugin {
   }
 
   runDocker(funcArgs, cargoPackage, binary) {
+    const home = homedir();
     const defaultArgs = [
       'run',
       '--rm',
       '-t',
       '-e', `BIN=${binary}`,
       `-v`, `${this.servicePath}:/code`,
-      `-v`, `${process.env['HOME']}/.cargo/registry:/root/.cargo/registry`,
-      `-v`, `${process.env['HOME']}/.cargo/git:/root/.cargo/git`,
+      `-v`, `${home}/.cargo/registry:/root/.cargo/registry`,
+      `-v`, `${home}/.cargo/git:/root/.cargo/git`,
     ];
     const customArgs = [];
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
