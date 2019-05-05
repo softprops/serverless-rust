@@ -52,14 +52,16 @@ class RustPlugin {
 
   runDocker(funcArgs, cargoPackage, binary) {
     const home = homedir();
+    const cargoRegistry = path.join(home, ".cargo/registry");
+    const cargoDownloads = path.join(home, ".cargo/git");
     const defaultArgs = [
       'run',
       '--rm',
       '-t',
       '-e', `BIN=${binary}`,
       `-v`, `${this.servicePath}:/code`,
-      `-v`, `${home}/.cargo/registry:/root/.cargo/registry`,
-      `-v`, `${home}/.cargo/git:/root/.cargo/git`,
+      `-v`, `${cargoRegistry}:/root/.cargo/registry`,
+      `-v`, `${cargoDownloads}:/root/.cargo/git`,
     ];
     const customArgs = [];
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
