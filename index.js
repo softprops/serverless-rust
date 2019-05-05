@@ -14,9 +14,9 @@ const BASE_RUNTIME = "provided";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
 
 function includeInvokeHook(serverlessVersion) {
-  let [major, minor] = serverlessVersion.split('.')
-  let majorVersion = parseInt(major)
-  let minorVersion = parseInt(minor)
+  let [major, minor] = serverlessVersion.split('.');
+  let majorVersion = parseInt(major);
+  let minorVersion = parseInt(minor);
   return majorVersion === 1 && minorVersion >= 38 && minorVersion < 40;
 }
 
