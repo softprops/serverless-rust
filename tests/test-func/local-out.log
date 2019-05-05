@@ -1,10 +1,1 @@
-  Error --------------------------------------------------
-  Error: no Rust functions found. Use 'runtime: rust' in global or function configuration to use this plugin.
-     For debugging logs, run again after setting the "SLS_DEBUG=*" environment variable.
-  Get Support --------------------------------------------
-     Docs:          docs.serverless.com
-     Bugs:          github.com/serverless/serverless/issues
-     Issues:        forum.serverless.com
-  Your Environment Information ---------------------------
-     OS:                     darwin
-     Node Version:           11.14.0
+{"baz":"boom"}
