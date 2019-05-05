@@ -1,6 +1,6 @@
 # ⚡ 0.3.4
 
-- fix a `npx serverless invoke local` for versions of serverless framework `1.40.*` which now emit `package` events as within `invokeLocal` events.
+- fix a `npx serverless invoke local` for versions of serverless framework `1.40.*` which now emit `package` events as within `invokeLocal` events. [#38](https://github.com/softprops/serverless-rust/pull/38)
 - bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.34.1 to gain [new rust 1.34.1 features](https://blog.rust-lang.org/2019/04/25/Rust-1.34.1.html).
 - use `os.homedir()` instead of `process.env['HOME']` for improved portability
 
