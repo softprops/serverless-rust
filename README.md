@@ -111,7 +111,7 @@ $ npx serverless logs -f hello
 
 ## 🏗️ serverless templates
 
-### 0.2.*
+### ^0.2.*
 
 * a minimal echo application - https://github.com/softprops/serverless-aws-rust
 * a minimal http application - https://github.com/softprops/serverless-aws-rust-http
