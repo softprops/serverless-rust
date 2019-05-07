@@ -115,8 +115,9 @@ $ npx serverless logs -f hello
 
 * a minimal echo application - https://github.com/softprops/serverless-aws-rust
 * a minimal http application - https://github.com/softprops/serverless-aws-rust-http
-* a minimal example multi-function application - https://github.com/softprops/serverless-aws-rust-multi
-* an example of a apigateway websocket application - https://github.com/softprops/serverless-aws-rust-websockets
+* a minimal multi-function application - https://github.com/softprops/serverless-aws-rust-multi
+* a minimal apigateway websocket application - https://github.com/softprops/serverless-aws-rust-websockets
+* a minimal kinesis application - https://github.com/softprops/serverless-aws-rust-kinesis
 
 ### 0.1.*
 
@@ -126,4 +127,4 @@ Older versions targeted the python 3.6 AWS Lambda runtime and [rust crowbar](htt
 * multi function lando api gateway application - https://github.com/softprops/serverless-multi-lando
 * crowbar cloudwatch scheduled lambda application - https://github.com/softprops/serverless-crowbar
 
-Doug Tangren (softprops) 2018
+Doug Tangren (softprops) 2018-2019
