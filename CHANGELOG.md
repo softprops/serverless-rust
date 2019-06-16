@@ -1,3 +1,7 @@
+# ⚡ 0.3.5 (unreleased)
+
+*  bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.35.0 to gain [new rust 1.35.0 features](https://blog.rust-lang.org/2019/05/23/Rust-1.35.0.html).
+
 # ⚡ 0.3.4
 
 - fix a `npx serverless invoke local` for versions of serverless framework `1.40.*` which now emits `package` events  within `invokeLocal` events. [#38](https://github.com/softprops/serverless-rust/pull/38)
@@ -27,7 +31,7 @@ You can still use this plugin with older versions of serverless but `invoke loca
 
 # ⚡ 0.3.0
 
-- bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.32.0, fixing a bug where cargo binaries named `bootstrap` weren't getting packaged. Reminder: this plugin renames binaries to `bootstrap` for the lambda runtime for you. You don't have do to this manually in your Cargo configuration. This also introduces an effiency in the way binaries are identified for packaging that may help some windows users.
+- bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.32.0, fixing a bug where cargo binaries named `bootstrap` weren't getting packaged. Reminder: this plugin renames binaries to `bootstrap` for the lambda runtime for you. You don't have do to this manually in your Cargo configuration. This also introduces an efficiency in the way binaries are identified for packaging that may help some windows users.
 - bump serverless version to [`1.37.1`](https://github.com/serverless/serverless/releases/tag/v1.37.1)
 
 
@@ -63,7 +67,7 @@ You can still use this plugin with older versions of serverless but `invoke loca
 
 - bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.1.0-rust-1.27.2, to make the new default Rust 1.27.2 (the latest release of Rust at this time)
 - speed up deployments by ~3.2 seconds by disabling excludeDevDependencies. it's on by default but it's not useful for for Rust focused services
-- the `custom.rust` config object can be overrided at the function level
+- the `custom.rust` config object can be overridden at the function level
 
 ```yaml
 functions:
@@ -85,7 +89,7 @@ functions:
 # ⚡ 0.1.2
 
 - bump lambda rust docker version to 0.1.0-rust-1.26.2
-- use a polyfill for fs.copyFileSync to accomidate older versions of node on travis ci
+- use a polyfill for fs.copyFileSync to accommodate older versions of node on travis ci
 
 # ⚡ 0.1.1
 
