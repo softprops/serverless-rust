@@ -1,3 +1,7 @@
+# ⚡ 0.3.5 (unreleased)
+
+*  bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.35.0 to gain [new rust 1.35.0 features](https://blog.rust-lang.org/2019/05/23/Rust-1.35.0.html).
+
 # ⚡ 0.3.4
 
 - fix a `npx serverless invoke local` for versions of serverless framework `1.40.*` which now emits `package` events  within `invokeLocal` events. [#38](https://github.com/softprops/serverless-rust/pull/38)
