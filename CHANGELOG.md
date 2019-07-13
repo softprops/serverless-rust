@@ -1,4 +1,8 @@
-# ⚡ 0.3.5 (unreleased)
+# ⚡ 0.3.6
+
+*  bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.36.0 to gain [new rust 1.36.0 features](https://blog.rust-lang.org/2019/07/04/Rust-1.36.0.html).
+
+# ⚡ 0.3.5
 
 *  bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to 0.2.1-rust-1.35.0 to gain [new rust 1.35.0 features](https://blog.rust-lang.org/2019/05/23/Rust-1.35.0.html).
 
