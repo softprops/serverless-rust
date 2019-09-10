@@ -11,7 +11,7 @@ Install the plugin with npm
 $ npm i -D serverless-rust
 ```
 
-💡 This serverless plugin assumes you are building Rustlang lambdas targetting the AWS Lambda "provided" runtime. The [AWS Lambda Rust Runtime](https://github.com/awslabs/aws-lambda-rust-runtime) makes this easy.
+💡 This serverless plugin assumes you are building Rustlang lambdas targeting the AWS Lambda "provided" runtime. The [AWS Lambda Rust Runtime](https://github.com/awslabs/aws-lambda-rust-runtime) makes this easy.
 
 Add the following to your serverless project's `serverless.yml` file
 
@@ -21,7 +21,7 @@ provider:
   name: aws
   runtime: rust
 plugins:
-  # this adds informs servleress to use
+  # this adds informs serverless to use
   # the serverless-rust plugin
   - serverless-rust
 # creates one artifact for each function
@@ -62,7 +62,7 @@ custom:
 If your serverless project contains multiple functions, you may sometimes
 need to customize the options above at the function level. You can do this
 by defining a `rust` key with the same options inline in your function
-specficiation.
+specification.
 
 ```yaml
 functions:
@@ -96,7 +96,7 @@ $ npx serverless invoke local -f hello -d '{"hello":"world"}'
 $ npx serverless deploy
 ```
 
-### invoke your lambas in the cloud directly
+### invoke your lambdas in the cloud directly
 
 ```sh
 $ npx serverless invoke -f hello -d '{"hello":"world"}'
