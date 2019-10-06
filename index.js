@@ -51,9 +51,9 @@ class RustPlugin {
   }
 
   runDocker(funcArgs, cargoPackage, binary) {
-    const home = homedir();
-    const cargoRegistry = path.join(home, ".cargo/registry");
-    const cargoDownloads = path.join(home, ".cargo/git");
+    const cargoHome = process.env.CARGO_HOME || (path.join(homedir(), ".cargo"));
+    const cargoRegistry = path.join(cargoHome, "registry");
+    const cargoDownloads = path.join(cargoHome, "git");
     const defaultArgs = [
       'run',
       '--rm',
