@@ -81,6 +81,8 @@ assert_success "it supports serverless local invocation" \
      | grep -v "adding: bootstrap" \
      > local-out.log)
 
+echo "local invoke output '${cat local-out.log}'"
+
 assert_success "when serverless invokes locally, it produces expected output" \
     diff test-local.json local-out.log
 
