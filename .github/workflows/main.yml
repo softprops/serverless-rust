@@ -1,0 +1,17 @@
+name: Main
+
+on: push
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install
+        run: npm install
+      - name: Test
+        run: npm test
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        run: tests/test.sh
