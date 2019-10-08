@@ -6,12 +6,16 @@ jobs:
   unit-test:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Install
-        run: npm install
+        run: npm ci
       - name: Test
         run: npm test
   integration-test:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Test
         run: tests/test.sh
