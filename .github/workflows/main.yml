@@ -1,0 +1,35 @@
+name: Main
+
+on: push
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install
+        run: npm ci
+      - name: Test
+        run: npm test
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Test
+        run: tests/test.sh
+  publish:
+    needs: [unit-test, integration-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Publish
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+          npm publish
+        env:
+          CI: true
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

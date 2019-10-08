@@ -4,7 +4,8 @@
   "description": "Serverless framework plugin for Rustlang applications",
   "main": "index.js",
   "scripts": {
-    "test": "npx eslint ."
+    "test": "eslint *.js && prettier --check '*.js'",
+    "fmt": "prettier --write '*.js'"
   },
   "repository": {
     "type": "git",
@@ -28,7 +29,8 @@
     "serverless": "^1.53.0"
   },
   "devDependencies": {
-    "eslint": "^6.5.0"
+    "eslint": "^6.5.0",
+    "prettier": "^1.18.2"
   },
   "files": [
     "index.js",
