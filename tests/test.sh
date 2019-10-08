@@ -79,6 +79,7 @@ assert_success "it supports serverless local invocation" \
      | grep -v '^\W*$' \
      | grep -v " release " \
      | grep -v "adding: bootstrap" \
+     | grep -v "objcopy:" \
      > local-out.log)
 
 assert_success "when serverless invokes locally, it produces expected output" \
