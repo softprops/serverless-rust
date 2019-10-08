@@ -14,7 +14,7 @@ const BASE_RUNTIME = "provided";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
 
 function includeInvokeHook(serverlessVersion) {
-  let [major, minor] = serverlessVersion.split('.');
+  let [major, minor] = serverlessVersion.split(".");
   let majorVersion = parseInt(major);
   let minorVersion = parseInt(minor);
   return majorVersion === 1 && minorVersion >= 38 && minorVersion < 40;
@@ -28,10 +28,10 @@ class RustPlugin {
     this.servicePath = this.serverless.config.servicePath || "";
     this.hooks = {
       "before:package:createDeploymentArtifacts": this.build.bind(this),
-      "before:deploy:function:packageFunction": this.build.bind(this),
+      "before:deploy:function:packageFunction": this.build.bind(this)
     };
     if (includeInvokeHook(serverless.version)) {
-      this.hooks['before:invoke:local:invoke'] = this.build.bind(this);
+      this.hooks["before:invoke:local:invoke"] = this.build.bind(this);
     }
     this.custom = Object.assign(
       {
@@ -51,17 +51,21 @@ class RustPlugin {
   }
 
   runDocker(funcArgs, cargoPackage, binary) {
-    const cargoHome = process.env.CARGO_HOME || (path.join(homedir(), ".cargo"));
+    const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
     const cargoRegistry = path.join(cargoHome, "registry");
     const cargoDownloads = path.join(cargoHome, "git");
     const defaultArgs = [
-      'run',
-      '--rm',
-      '-t',
-      '-e', `BIN=${binary}`,
-      `-v`, `${this.servicePath}:/code`,
-      `-v`, `${cargoRegistry}:/root/.cargo/registry`,
-      `-v`, `${cargoDownloads}:/root/.cargo/git`,
+      "run",
+      "--rm",
+      "-t",
+      "-e",
+      `BIN=${binary}`,
+      `-v`,
+      `${this.servicePath}:/code`,
+      `-v`,
+      `${cargoRegistry}:/root/.cargo/registry`,
+      `-v`,
+      `${cargoDownloads}:/root/.cargo/git`
     ];
     const customArgs = [];
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
@@ -114,9 +118,7 @@ class RustPlugin {
       const res = this.runDocker(func.rust, cargoPackage, binary);
       if (res.error || res.status > 0) {
         this.serverless.cli.log(
-          `Dockerized Rust build encountered an error: ${res.error} ${
-            res.status
-          }.`
+          `Dockerized Rust build encountered an error: ${res.error} ${res.status}.`
         );
         throw new Error(res.error);
       }
