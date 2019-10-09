@@ -68,7 +68,13 @@ class RustPlugin {
       `${cargoDownloads}:/root/.cargo/git`
     ];
     const customArgs = [];
+
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
+    let profile = (funcArgs || {}).profile || this.custom.profile;
+    if (profile) {
+      // release or dev
+      customArgs.push("-e", `PROFILE=${profile}`);
+    }
     if (cargoPackage != undefined) {
       if (cargoFlags) {
         cargoFlags = `${cargoFlags} -p ${cargoPackage}`;
