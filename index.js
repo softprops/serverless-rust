@@ -50,7 +50,7 @@ class RustPlugin {
     this.serverless.service.package.excludeDevDependencies = false;
   }
 
-  runDocker(funcArgs, cargoPackage, binary) {
+  runDocker(funcArgs, cargoPackage, binary, profile) {
     const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
     const cargoRegistry = path.join(cargoHome, "registry");
     const cargoDownloads = path.join(cargoHome, "git");
@@ -70,7 +70,6 @@ class RustPlugin {
     const customArgs = [];
 
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
-    let profile = (funcArgs || {}).profile || this.custom.profile;
     if (profile) {
       // release or dev
       customArgs.push("-e", `PROFILE=${profile}`);
@@ -121,7 +120,8 @@ class RustPlugin {
         binary = cargoPackage;
       }
       this.serverless.cli.log(`Building native Rust ${func.handler} func...`);
-      const res = this.runDocker(func.rust, cargoPackage, binary);
+      let profile = (func.rust || {}).profile || this.custom.profile;
+      const res = this.runDocker(func.rust, cargoPackage, binary, profile);
       if (res.error || res.status > 0) {
         this.serverless.cli.log(
           `Dockerized Rust build encountered an error: ${res.error} ${res.status}.`
@@ -137,7 +137,7 @@ class RustPlugin {
       // we leverage the ability to declare a package artifact directly
       // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
       // for more information
-      const artifactPath = path.join("target/lambda/release", binary + ".zip");
+      const artifactPath = path.join(`target/lambda/${'dev' === profile ? 'debug' : 'release'}`, binary + ".zip");
       func.package = func.package || {};
       func.package.artifact = artifactPath;
 
