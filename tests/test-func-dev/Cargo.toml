@@ -1,0 +1,9 @@
+[package]
+name = "test-func"
+version = "0.1.0"
+authors = ["softprops <d.tangren@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+lambda_runtime = "0.2"
+serde_json = "1.0"
