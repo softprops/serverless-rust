@@ -137,7 +137,10 @@ class RustPlugin {
       // we leverage the ability to declare a package artifact directly
       // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
       // for more information
-      const artifactPath = path.join(`target/lambda/${'dev' === profile ? 'debug' : 'release'}`, binary + ".zip");
+      const artifactPath = path.join(
+        `target/lambda/${"dev" === profile ? "debug" : "release"}`,
+        binary + ".zip"
+      );
       func.package = func.package || {};
       func.package.artifact = artifactPath;
 
