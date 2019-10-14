@@ -3,11 +3,11 @@
 # Directory of the integration test
 HERE=$(dirname "$0")
 # Root directory of the repository
-DIST=$(cd ..; echo "$PWD")
+DIST=$(cd $HERE/..; echo "$PWD")
 
 source "${HERE}"/bashtest.sh
 
-for project in "${HERE}"/test-func "${HERE}"/test-dev; do
+for project in  test-func test-func-dev; do
 
     cd "${HERE}"/"${project}"
 
@@ -19,7 +19,7 @@ for project in "${HERE}"/test-func "${HERE}"/test-dev; do
     assert_success "it packages with serverless" \
         npx serverless package
 
-    if [[ "$project" == ${HERE}/test-func ]]; then
+    if [[ "$project" == test-func ]]; then
         # verify packaged artifact by invoking it using the lambdaci "provided" docker image
         unzip -o  \
             target/lambda/release/test-func.zip \
