@@ -3,13 +3,19 @@
 # Directory of the integration test
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # Root directory of the repository
-DIST=$(cd ..; pwd)
+DIST=$(cd $HERE/..; pwd)
 
 source "${HERE}"/bashtest.sh
 
 for project in  test-func test-func-dev; do
 
     cd "${HERE}"/"${project}"
+
+    if [[ "${project}" == "test-func" ]]; then
+        target=release
+    else
+        target=debug
+    fi
 
     # install build deps
     assert_success "it installs with npm" \
@@ -19,24 +25,22 @@ for project in  test-func test-func-dev; do
     assert_success "it packages with serverless" \
         npx serverless package
 
-    if [[ "$project" == test-func ]]; then
-        # verify packaged artifact by invoking it using the lambdaci "provided" docker image
-        unzip -o  \
-            target/lambda/release/test-func.zip \
-            -d /tmp/lambda > /dev/null 2>&1 && \
-        docker run \
-            -i --rm \
-            -e DOCKER_LAMBDA_USE_STDIN=1 \
-            -v /tmp/lambda:/var/task \
-            lambci/lambda:provided \
-            < test-event.json \
-            | grep -v RequestId \
-            | grep -v '^\W*$' \
-            > test-out.log
+    # verify packaged artifact by invoking it using the lambdaci "provided" docker image
+    unzip -o  \
+        target/lambda/"${target}"/test-func.zip \
+        -d /tmp/lambda > /dev/null 2>&1 && \
+    docker run \
+        -i --rm \
+        -e DOCKER_LAMBDA_USE_STDIN=1 \
+        -v /tmp/lambda:/var/task \
+        lambci/lambda:provided \
+        < test-event.json \
+        | grep -v RequestId \
+        | grep -v '^\W*$' \
+        > test-out.log
 
-        assert_success "when invoked, it produces expected output" \
-            diff test-event.json test-out.log
-    fi
+    assert_success "when invoked, it produces expected output" \
+        diff test-event.json test-out.log
 
     # integration test local invocation
     assert_success "it supports serverless local invocation" \
