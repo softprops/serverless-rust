@@ -13,7 +13,7 @@ plugins:
 
 custom:
   rust:
-    profile: debug
+    profile: dev
 
 functions:
   hello:
