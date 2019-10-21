@@ -10,6 +10,7 @@ source "${HERE}"/bashtest.sh
 for project in  test-func test-func-dev; do
 
     cd "${HERE}"/"${project}"
+    echo "👩‍🔬 Running tests for $project"
 
     if [[ "${project}" == "test-func" ]]; then
         target=release
