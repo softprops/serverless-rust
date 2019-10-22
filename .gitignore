@@ -1,4 +1,5 @@
 node_modules
 target
 tests/test-func/test-out.log
+tests/test-func-dev/test-out.log
 .serverless
