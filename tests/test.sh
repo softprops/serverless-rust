@@ -50,7 +50,8 @@ for project in  test-func test-func-dev; do
         | grep -v Serverless \
         | grep -v RequestId \
         | grep -v '^\W*$' \
-        | grep -v " release " \
+        | grep -v "release " \
+        | grep -v "unoptimized " \
         | grep -v "adding: bootstrap" \
         | grep -v "objcopy:" \
         > local-out.log)
