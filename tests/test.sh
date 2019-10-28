@@ -5,6 +5,7 @@ HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # Root directory of the repository
 DIST=$(cd $HERE/..; pwd)
 export SILENT=1
+export SLS_DEBUG=*
 
 source "${HERE}"/bashtest.sh
 
