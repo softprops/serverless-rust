@@ -59,8 +59,8 @@ class RustPlugin {
 
   buildInDocker(funcArgs, cargoPackage, binary) {
     const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
-    return invokeCommand("docker", [
-      ...getDockerArgs(binary, cargoPackage),
+    return this.invokeCommand("docker", [
+      ...this.getDockerArgs(funcArgs, cargoPackage, binary),
       `softprops/lambda-rust:${dockerTag}`
     ]);
   }
@@ -71,10 +71,10 @@ class RustPlugin {
     if (cargoFlags) {
       args.unshift(`CARGO_FLAGS=${cargoFlags}`);
     }
-    return invokeCommand(buildCommand.join(" "));
+    return this.invokeCommand(buildCommand.join(" "));
   }
 
-  getDockerArgs(binary, cargoPackage) {
+  getDockerArgs(funcArgs, cargoPackage, binary) {
     const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
     const cargoRegistry = path.join(cargoHome, "registry");
     const cargoDownloads = path.join(cargoHome, "git");
