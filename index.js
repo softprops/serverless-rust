@@ -50,11 +50,35 @@ class RustPlugin {
     this.serverless.service.package.excludeDevDependencies = false;
   }
 
-  runDocker(funcArgs, cargoPackage, binary) {
+  compileFunctionBinary(funcArgs, cargoPackage, binary, dockerless) {
+    if (dockerless) {
+      return this.buildFromShell(funcArgs, cargoPackage, binary);
+    }
+    return this.buildInDocker(funcArgs, cargoPackage, binary);
+  }
+
+  buildInDocker(funcArgs, cargoPackage, binary) {
+    const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
+    return invokeCommand("docker", [
+      ...getDockerArgs(binary, cargoPackage),
+      `softprops/lambda-rust:${dockerTag}`
+    ]);
+  }
+
+  buildFromShell(funcArgs, cargoPackage, binary) {
+    const buildCommand = [`BIN=${binary}`, "./build.sh"];
+    const cargoFlags = this.getCargoFlags(funcArgs, cargoPackage);
+    if (cargoFlags) {
+      args.unshift(`CARGO_FLAGS=${cargoFlags}`);
+    }
+    return invokeCommand(buildCommand.join(" "));
+  }
+
+  getDockerArgs(binary, cargoPackage) {
     const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
     const cargoRegistry = path.join(cargoHome, "registry");
     const cargoDownloads = path.join(cargoHome, "git");
-    const defaultArgs = [
+    const args = [
       "run",
       "--rm",
       "-t",
@@ -67,6 +91,15 @@ class RustPlugin {
       `-v`,
       `${cargoDownloads}:/root/.cargo/git`
     ];
+    const cargoFlags = this.getCargoFlags(funcArgs, cargoPackage);
+    if (cargoFlags) {
+      // --features awesome-feature, ect
+      args.push("-e", `CARGO_FLAGS=${cargoFlags}`);
+    }
+    return args;
+  }
+
+  getCargoFlags(funcArgs, cargoPackage) {
     const customArgs = [];
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
     if (cargoPackage != undefined) {
@@ -76,16 +109,12 @@ class RustPlugin {
         cargoFlags = ` -p ${cargoPackage}`;
       }
     }
-    if (cargoFlags) {
-      // --features awesome-feature, ect
-      customArgs.push("-e", `CARGO_FLAGS=${cargoFlags}`);
-    }
-    const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
-    return spawnSync(
-      "docker",
-      [...defaultArgs, ...customArgs, `softprops/lambda-rust:${dockerTag}`],
-      NO_OUTPUT_CAPTURE
-    );
+
+    return customArgs;
+  }
+
+  invokeCommand(command, args) {
+    return spawnSync(command, args, NO_OUTPUT_CAPTURE);
   }
 
   functions() {
@@ -115,10 +144,15 @@ class RustPlugin {
         binary = cargoPackage;
       }
       this.serverless.cli.log(`Building native Rust ${func.handler} func...`);
-      const res = this.runDocker(func.rust, cargoPackage, binary);
+      const res = this.compileFunctionBinary(
+        func.rust,
+        cargoPackage,
+        binary,
+        this.custom.dockerless
+      );
       if (res.error || res.status > 0) {
         this.serverless.cli.log(
-          `Dockerized Rust build encountered an error: ${res.error} ${res.status}.`
+          `Rust build encountered an error: ${res.error} ${res.status}.`
         );
         throw new Error(res.error);
       }
