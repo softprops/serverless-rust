@@ -35,6 +35,7 @@
   "files": [
     "index.js",
     "package.json",
+    "build.sh",
     "README.md"
   ]
 }
