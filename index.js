@@ -69,7 +69,7 @@ class RustPlugin {
     const buildCommand = [`BIN=${binary}`, "./build.sh"];
     const cargoFlags = this.getCargoFlags(funcArgs, cargoPackage);
     if (cargoFlags) {
-      args.unshift(`CARGO_FLAGS=${cargoFlags}`);
+      buildCommand.unshift(`CARGO_FLAGS=${cargoFlags}`);
     }
     return this.invokeCommand(buildCommand.join(" "));
   }
