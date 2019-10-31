@@ -59,10 +59,14 @@ class RustPlugin {
 
   buildInDocker(funcArgs, cargoPackage, binary) {
     const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
-    return this.invokeCommand("docker", [
-      ...this.getDockerArgs(funcArgs, cargoPackage, binary),
-      `softprops/lambda-rust:${dockerTag}`
-    ]);
+    return spawnSync(
+      "docker",
+      [
+        ...this.getDockerArgs(funcArgs, cargoPackage, binary),
+        `softprops/lambda-rust:${dockerTag}`
+      ],
+      NO_OUTPUT_CAPTURE
+    );
   }
 
   buildFromShell(funcArgs, cargoPackage, binary) {
@@ -110,10 +114,6 @@ class RustPlugin {
     }
 
     return cargoFlags;
-  }
-
-  invokeCommand(command, args) {
-    return spawnSync(command, args, NO_OUTPUT_CAPTURE);
   }
 
   functions() {
