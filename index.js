@@ -4,7 +4,7 @@
 // https://serverless.com/framework/docs/providers/aws/guide/plugins/
 // https://github.com/softprops/lambda-rust/
 
-const { spawnSync } = require("child_process");
+const { spawnSync, execSync } = require("child_process");
 const { homedir } = require("os");
 const path = require("path");
 
@@ -66,12 +66,12 @@ class RustPlugin {
   }
 
   buildFromShell(funcArgs, cargoPackage, binary) {
-    const buildCommand = [`BIN=${binary}`, "./build.sh"];
+    const buildCommand = [`BIN=${binary}`, `${__dirname}/build.sh`];
     const cargoFlags = this.getCargoFlags(funcArgs, cargoPackage);
     if (cargoFlags) {
-      buildCommand.unshift(`CARGO_FLAGS=${cargoFlags}`);
+      buildCommand.unshift(`CARGO_FLAGS="${cargoFlags}"`);
     }
-    return this.invokeCommand(buildCommand.join(" "));
+    return execSync(`${buildCommand.join(" ")}`);
   }
 
   getDockerArgs(funcArgs, cargoPackage, binary) {
@@ -100,7 +100,6 @@ class RustPlugin {
   }
 
   getCargoFlags(funcArgs, cargoPackage) {
-    const customArgs = [];
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
     if (cargoPackage != undefined) {
       if (cargoFlags) {
@@ -110,7 +109,7 @@ class RustPlugin {
       }
     }
 
-    return customArgs;
+    return cargoFlags;
   }
 
   invokeCommand(command, args) {
