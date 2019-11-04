@@ -46,9 +46,6 @@ for project in  test-func test-func-dev; do
     assert_success "when invoked, it produces expected output" \
         diff test-event.json test-out.log
 
-    echo "pre test: delete me"
-    npx serverless invoke local -f hello -d '{"baz":"boom"}'
-
     # integration test local invocation
     assert_success "it supports serverless local invocation" \
         $(npx serverless invoke local -f hello -d '{"baz":"boom"}' \
