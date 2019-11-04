@@ -8,7 +8,7 @@ const { spawnSync } = require("child_process");
 const { homedir } = require("os");
 const path = require("path");
 
-const DEFAULT_DOCKER_TAG = "0.2.4-rust-1.38.0";
+const DEFAULT_DOCKER_TAG = "0.2.6-rust-1.38.0";
 const RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
@@ -50,7 +50,7 @@ class RustPlugin {
     this.serverless.service.package.excludeDevDependencies = false;
   }
 
-  runDocker(funcArgs, cargoPackage, binary) {
+  runDocker(funcArgs, cargoPackage, binary, profile) {
     const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
     const cargoRegistry = path.join(cargoHome, "registry");
     const cargoDownloads = path.join(cargoHome, "git");
@@ -68,7 +68,12 @@ class RustPlugin {
       `${cargoDownloads}:/root/.cargo/git`
     ];
     const customArgs = [];
+
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
+    if (profile) {
+      // release or dev
+      customArgs.push("-e", `PROFILE=${profile}`);
+    }
     if (cargoPackage != undefined) {
       if (cargoFlags) {
         cargoFlags = `${cargoFlags} -p ${cargoPackage}`;
@@ -115,7 +120,8 @@ class RustPlugin {
         binary = cargoPackage;
       }
       this.serverless.cli.log(`Building native Rust ${func.handler} func...`);
-      const res = this.runDocker(func.rust, cargoPackage, binary);
+      let profile = (func.rust || {}).profile || this.custom.profile;
+      const res = this.runDocker(func.rust, cargoPackage, binary, profile);
       if (res.error || res.status > 0) {
         this.serverless.cli.log(
           `Dockerized Rust build encountered an error: ${res.error} ${res.status}.`
@@ -131,7 +137,10 @@ class RustPlugin {
       // we leverage the ability to declare a package artifact directly
       // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
       // for more information
-      const artifactPath = path.join("target/lambda/release", binary + ".zip");
+      const artifactPath = path.join(
+        `target/lambda/${"dev" === profile ? "debug" : "release"}`,
+        binary + ".zip"
+      );
       func.package = func.package || {};
       func.package.artifact = artifactPath;
 

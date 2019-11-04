@@ -1,0 +1,20 @@
+
+service: aws-rust # NOTE: update this with your service name
+provider:
+  name: aws
+  runtime: rust
+  memorySize: 128
+
+package:
+  individually: true
+
+plugins:
+  - serverless-rust
+
+custom:
+  rust:
+    profile: dev
+
+functions:
+  hello:
+    handler: test-func
