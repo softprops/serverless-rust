@@ -2,6 +2,8 @@ node_modules
 target
 tests/test-func/test-out.log
 tests/test-func-dev/test-out.log
+tests/test-func-dockerless/test-out.log
 tests/test-func/local-out.log
 tests/test-func-dev/local-out.log
+tests/test-func-dockerless/local-out.log
 .serverless
