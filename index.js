@@ -8,7 +8,7 @@ const { spawnSync } = require("child_process");
 const { homedir } = require("os");
 const path = require("path");
 
-const DEFAULT_DOCKER_TAG = "0.2.4-rust-1.38.0";
+const DEFAULT_DOCKER_TAG = "0.2.6-rust-1.39.0";
 const RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
@@ -101,7 +101,12 @@ class RustPlugin {
 
   getCargoFlags(funcArgs, cargoPackage) {
     const customArgs = [];
+
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
+    if (profile) {
+      // release or dev
+      customArgs.push("-e", `PROFILE=${profile}`);
+    }
     if (cargoPackage != undefined) {
       if (cargoFlags) {
         cargoFlags = `${cargoFlags} -p ${cargoPackage}`;
@@ -144,6 +149,7 @@ class RustPlugin {
         binary = cargoPackage;
       }
       this.serverless.cli.log(`Building native Rust ${func.handler} func...`);
+      let profile = (func.rust || {}).profile || this.custom.profile;
       const res = this.compileFunctionBinary(
         func.rust,
         cargoPackage,
@@ -165,7 +171,10 @@ class RustPlugin {
       // we leverage the ability to declare a package artifact directly
       // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
       // for more information
-      const artifactPath = path.join("target/lambda/release", binary + ".zip");
+      const artifactPath = path.join(
+        `target/lambda/${"dev" === profile ? "debug" : "release"}`,
+        binary + ".zip"
+      );
       func.package = func.package || {};
       func.package.artifact = artifactPath;
 
