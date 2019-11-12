@@ -50,26 +50,32 @@ class RustPlugin {
     this.serverless.service.package.excludeDevDependencies = false;
   }
 
-  compileFunctionBinary(funcArgs, cargoPackage, binary, profile, dockerless) {
+  compileFunctionBinary({
+    funcArgs,
+    cargoPackage,
+    binary,
+    profile,
+    dockerless
+  }) {
     if (dockerless) {
-      return this.buildFromShell(funcArgs, cargoPackage, binary, profile);
+      return this.buildFromShell({ funcArgs, cargoPackage, binary, profile });
     }
-    return this.buildInDocker(funcArgs, cargoPackage, binary, profile);
+    return this.buildInDocker({ funcArgs, cargoPackage, binary, profile });
   }
 
-  buildInDocker(funcArgs, cargoPackage, binary) {
+  buildInDocker({ funcArgs, cargoPackage, binary, profile }) {
     const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
     return spawnSync(
       "docker",
       [
-        ...this.getDockerArgs(funcArgs, cargoPackage, binary),
+        ...this.getDockerArgs({ funcArgs, cargoPackage, binary, profile }),
         `softprops/lambda-rust:${dockerTag}`
       ],
       NO_OUTPUT_CAPTURE
     );
   }
 
-  buildFromShell(funcArgs, cargoPackage, binary, profile) {
+  buildFromShell({ funcArgs, cargoPackage, binary, profile }) {
     const buildCommand = [`BIN=${binary}`, `${__dirname}/build.sh`];
     const cargoFlags = this.getCargoFlags(funcArgs, cargoPackage);
     if (cargoFlags) {
@@ -82,7 +88,7 @@ class RustPlugin {
     return execSync(`${buildCommand.join(" ")}`);
   }
 
-  getDockerArgs(funcArgs, cargoPackage, binary, profile) {
+  getDockerArgs({ funcArgs, cargoPackage, binary, profile }) {
     const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
     const cargoRegistry = path.join(cargoHome, "registry");
     const cargoDownloads = path.join(cargoHome, "git");
@@ -152,13 +158,13 @@ class RustPlugin {
       }
       this.serverless.cli.log(`Building native Rust ${func.handler} func...`);
       let profile = (func.rust || {}).profile || this.custom.profile;
-      const res = this.compileFunctionBinary(
-        func.rust,
+      const res = this.compileFunctionBinary({
+        rust: func.rust,
         cargoPackage,
         binary,
         profile,
-        this.custom.dockerless
-      );
+        dockerless: this.custom.dockerless
+      });
       if (res.error || res.status > 0) {
         this.serverless.cli.log(
           `Rust build encountered an error: ${res.error} ${res.status}.`

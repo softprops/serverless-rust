@@ -10,7 +10,7 @@ export SILENT=1
 
 source "${HERE}"/bashtest.sh
 
-for project in  test-func test-func-dev; do
+for project in  test-func test-func-dev test-func-dockerless; do
 
     cd "${HERE}"/"${project}"
     echo "👩‍🔬 Running tests for $project"
