@@ -1,6 +1,6 @@
 # ⚡ 0.3.7
 
-* bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to `0.2.4-rust-1.38.0` to gain rust [1.37.0](https://blog.rust-lang.org/2019/08/15/Rust-1.37.0.html) and  [1.38.0](https://blog.rust-lang.org/2019/09/26/Rust-1.38.0.html) features
+* bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to `0.2.6-rust-1.39.0` to gain rust [1.37.0](https://blog.rust-lang.org/2019/08/15/Rust-1.37.0.html), [1.38.0](https://blog.rust-lang.org/2019/09/26/Rust-1.38.0.html), and   [1.39.0](https://blog.rust-lang.org/2019/11/07/Rust-1.39.0.html) features and dropping over 200 megabytes from previous docker images.
 * This plugin now respects your `CARGO_HOME` environment variable if set [#46](https://github.com/softprops/serverless-rust/pull/46). This is useful when you for cases where where you do not have cache cargo artifacts in your `${HOME}/.cargo` directory.
 
 # ⚡ 0.3.6

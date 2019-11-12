@@ -8,7 +8,7 @@ const { spawnSync, execSync } = require("child_process");
 const { homedir } = require("os");
 const path = require("path");
 
-const DEFAULT_DOCKER_TAG = "0.2.4-rust-1.38.0";
+const DEFAULT_DOCKER_TAG = "0.2.6-rust-1.39.0";
 const RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
@@ -50,11 +50,11 @@ class RustPlugin {
     this.serverless.service.package.excludeDevDependencies = false;
   }
 
-  compileFunctionBinary(funcArgs, cargoPackage, binary, dockerless) {
+  compileFunctionBinary(funcArgs, cargoPackage, binary, profile, dockerless) {
     if (dockerless) {
-      return this.buildFromShell(funcArgs, cargoPackage, binary);
+      return this.buildFromShell(funcArgs, cargoPackage, binary, profile);
     }
-    return this.buildInDocker(funcArgs, cargoPackage, binary);
+    return this.buildInDocker(funcArgs, cargoPackage, binary, profile);
   }
 
   buildInDocker(funcArgs, cargoPackage, binary) {
@@ -69,16 +69,20 @@ class RustPlugin {
     );
   }
 
-  buildFromShell(funcArgs, cargoPackage, binary) {
+  buildFromShell(funcArgs, cargoPackage, binary, profile) {
     const buildCommand = [`BIN=${binary}`, `${__dirname}/build.sh`];
     const cargoFlags = this.getCargoFlags(funcArgs, cargoPackage);
     if (cargoFlags) {
       buildCommand.unshift(`CARGO_FLAGS="${cargoFlags}"`);
     }
+    if (profile) {
+      buildCommand.unshift(`PROFILE=${profile}`);
+    }
+
     return execSync(`${buildCommand.join(" ")}`);
   }
 
-  getDockerArgs(funcArgs, cargoPackage, binary) {
+  getDockerArgs(funcArgs, cargoPackage, binary, profile) {
     const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
     const cargoRegistry = path.join(cargoHome, "registry");
     const cargoDownloads = path.join(cargoHome, "git");
@@ -99,6 +103,10 @@ class RustPlugin {
     if (cargoFlags) {
       // --features awesome-feature, ect
       args.push("-e", `CARGO_FLAGS=${cargoFlags}`);
+    }
+    if (profile) {
+      // release or dev
+      args.push("-e", `PROFILE=${profile}`);
     }
     return args;
   }
@@ -143,10 +151,12 @@ class RustPlugin {
         binary = cargoPackage;
       }
       this.serverless.cli.log(`Building native Rust ${func.handler} func...`);
+      let profile = (func.rust || {}).profile || this.custom.profile;
       const res = this.compileFunctionBinary(
         func.rust,
         cargoPackage,
         binary,
+        profile,
         this.custom.dockerless
       );
       if (res.error || res.status > 0) {
@@ -164,7 +174,10 @@ class RustPlugin {
       // we leverage the ability to declare a package artifact directly
       // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
       // for more information
-      const artifactPath = path.join("target/lambda/release", binary + ".zip");
+      const artifactPath = path.join(
+        `target/lambda/${"dev" === profile ? "debug" : "release"}`,
+        binary + ".zip"
+      );
       func.package = func.package || {};
       func.package.artifact = artifactPath;
 
