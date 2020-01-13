@@ -33,7 +33,7 @@ for project in  test-func test-func-dev; do
     unzip -o  \
         target/lambda/"${target}"/test-func.zip \
         -d /tmp/lambda > /dev/null 2>&1 && \
-    docker run \
+    ${SLS_DOCKER_CLI:-docker} run \
         -i --rm \
         -e DOCKER_LAMBDA_USE_STDIN=1 \
         -v /tmp/lambda:/var/task \
