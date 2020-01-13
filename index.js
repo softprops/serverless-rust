@@ -51,14 +51,16 @@ class RustPlugin {
   }
 
   runDocker(funcArgs, cargoPackage, binary, profile) {
-    const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
-    const cargoRegistry = path.join(cargoHome, "registry");
-    const cargoDownloads = path.join(cargoHome, "git");
+    const cargoHome = process.env.CARGO_HOME || path.join(homedir(), '.cargo');
+    const cargoRegistry = path.join(cargoHome, 'registry');
+    const cargoDownloads = path.join(cargoHome, 'git');
+
+    const dockerCLI = process.env['SLS_DOCKER_CLI'] || 'docker';
     const defaultArgs = [
-      "run",
-      "--rm",
-      "-t",
-      "-e",
+      'run',
+      '--rm',
+      '-t',
+      '-e',
       `BIN=${binary}`,
       `-v`,
       `${this.servicePath}:/code`,
@@ -67,12 +69,12 @@ class RustPlugin {
       `-v`,
       `${cargoDownloads}:/root/.cargo/git`
     ];
-    const customArgs = [];
+    const customArgs = (process.env['SLS_DOCKER_ARGS'] || '').split(' ') || [];
 
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
     if (profile) {
       // release or dev
-      customArgs.push("-e", `PROFILE=${profile}`);
+      customArgs.push('-e', `PROFILE=${profile}`);
     }
     if (cargoPackage != undefined) {
       if (cargoFlags) {
@@ -83,14 +85,21 @@ class RustPlugin {
     }
     if (cargoFlags) {
       // --features awesome-feature, ect
-      customArgs.push("-e", `CARGO_FLAGS=${cargoFlags}`);
+      customArgs.push('-e', `CARGO_FLAGS=${cargoFlags}`);
     }
     const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
-    return spawnSync(
-      "docker",
-      [...defaultArgs, ...customArgs, `softprops/lambda-rust:${dockerTag}`],
-      NO_OUTPUT_CAPTURE
+
+    const finalArgs = [
+      ...defaultArgs,
+      ...customArgs,
+      `softprops/lambda-rust:${dockerTag}`
+    ].filter(i => i);
+
+    this.serverless.cli.log(
+      `Running container build with: ${dockerCLI}, args: ${finalArgs}.`
     );
+
+    return spawnSync(dockerCLI, finalArgs, NO_OUTPUT_CAPTURE);
   }
 
   functions() {
