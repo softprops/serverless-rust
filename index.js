@@ -9,6 +9,7 @@ const { homedir } = require("os");
 const path = require("path");
 
 const DEFAULT_DOCKER_TAG = "0.2.6-rust-1.39.0";
+const DEFAULT_DOCKER_IMAGE = "softprops/lambda-rust";
 const RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
@@ -36,7 +37,8 @@ class RustPlugin {
     this.custom = Object.assign(
       {
         cargoFlags: "",
-        dockerTag: DEFAULT_DOCKER_TAG
+        dockerTag: DEFAULT_DOCKER_TAG,
+        dockerImage: DEFAULT_DOCKER_IMAGE
       },
       (this.serverless.service.custom && this.serverless.service.custom.rust) ||
         {}
@@ -88,11 +90,12 @@ class RustPlugin {
       customArgs.push('-e', `CARGO_FLAGS=${cargoFlags}`);
     }
     const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
+    const dockerImage = (funcArgs || {}).dockerImage || this.custom.dockerImage;
 
     const finalArgs = [
       ...defaultArgs,
       ...customArgs,
-      `softprops/lambda-rust:${dockerTag}`
+      `${dockerImage}:${dockerTag}`
     ].filter(i => i);
 
     this.serverless.cli.log(
