@@ -58,6 +58,7 @@ class RustPlugin {
     const cargoDownloads = path.join(cargoHome, 'git');
 
     const dockerCLI = process.env['SLS_DOCKER_CLI'] || 'docker';
+    const servicePath = (funcArgs || {}).servicePath || this.servicePath;
     const defaultArgs = [
       'run',
       '--rm',
@@ -65,7 +66,7 @@ class RustPlugin {
       '-e',
       `BIN=${binary}`,
       `-v`,
-      `${this.servicePath}:/code`,
+      `${servicePath}:/code`,
       `-v`,
       `${cargoRegistry}:/root/.cargo/registry`,
       `-v`,
