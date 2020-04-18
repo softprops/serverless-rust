@@ -38,7 +38,7 @@ class RustPlugin {
       {
         cargoFlags: "",
         dockerTag: DEFAULT_DOCKER_TAG,
-        dockerImage: DEFAULT_DOCKER_IMAGE,
+        dockerImage: DEFAULT_DOCKER_IMAGE
       },
       (this.serverless.service.custom && this.serverless.service.custom.rust) ||
         {}
@@ -58,8 +58,6 @@ class RustPlugin {
     const cargoDownloads = path.join(cargoHome, 'git');
 
     const dockerCLI = process.env['SLS_DOCKER_CLI'] || 'docker';
-    console.log("you're looking for this!");
-    console.log(this);
     const dockerPath = path.resolve(this.custom.dockerPath || this.servicePath);
     const defaultArgs = [
       'run',
