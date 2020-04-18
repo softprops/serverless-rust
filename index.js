@@ -59,7 +59,7 @@ class RustPlugin {
 
     const dockerCLI = process.env['SLS_DOCKER_CLI'] || 'docker';
     console.log("you're looking for this!");
-    console.log(funcArgs);
+    console.log(this);
     const path = this.custom.dockerPath || this.servicePath;
     const defaultArgs = [
       'run',
