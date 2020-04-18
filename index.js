@@ -39,7 +39,6 @@ class RustPlugin {
         cargoFlags: "",
         dockerTag: DEFAULT_DOCKER_TAG,
         dockerImage: DEFAULT_DOCKER_IMAGE,
-        servicePath: "asf"
       },
       (this.serverless.service.custom && this.serverless.service.custom.rust) ||
         {}
@@ -61,7 +60,7 @@ class RustPlugin {
     const dockerCLI = process.env['SLS_DOCKER_CLI'] || 'docker';
     console.log("you're looking for this!");
     console.log(funcArgs);
-    const servicePath = (funcArgs || {}).servicePath || this.servicePath;
+    const path = this.custom.dockerPath || this.servicePath;
     const defaultArgs = [
       'run',
       '--rm',
@@ -69,7 +68,7 @@ class RustPlugin {
       '-e',
       `BIN=${binary}`,
       `-v`,
-      `${servicePath}:/code`,
+      `${path}:/code`,
       `-v`,
       `${cargoRegistry}:/root/.cargo/registry`,
       `-v`,
