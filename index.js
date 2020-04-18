@@ -58,6 +58,8 @@ class RustPlugin {
     const cargoDownloads = path.join(cargoHome, 'git');
 
     const dockerCLI = process.env['SLS_DOCKER_CLI'] || 'docker';
+    console.log("you're looking for this!");
+    console.log(funcArgs);
     const servicePath = (funcArgs || {}).servicePath || this.servicePath;
     const defaultArgs = [
       'run',
