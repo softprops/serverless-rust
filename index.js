@@ -123,7 +123,11 @@ class RustPlugin {
     let rustFunctionsFound = false;
     this.functions().forEach(funcName => {
       const func = service.getFunction(funcName);
+      console.log("func");
+      console.log(func);
       const runtime = func.runtime || service.provider.runtime;
+      console.log("runtime");
+      console.log(runtime);
       if (runtime != RUST_RUNTIME) {
         // skip functions which don't apply to rust
         return;
@@ -156,8 +160,10 @@ class RustPlugin {
         `target/lambda/${"dev" === profile ? "debug" : "release"}`,
         binary + ".zip"
       );
+      console.log(`art ${artifactPath}`);
       func.package = func.package || {};
       func.package.artifact = artifactPath;
+      console.log(`package ${func.package}`);
 
       // Ensure the runtime is set to a sane value for other plugins
       if (func.runtime == RUST_RUNTIME) {
