@@ -44,6 +44,8 @@ class RustPlugin {
         {}
     );
 
+    this.dockerPath = path.resolve(this.custom.dockerPath || this.servicePath);
+
     // By default, Serverless examines node_modules to figure out which
     // packages there are from dependencies versus devDependencies of a
     // package. While there will always be a node_modules due to Serverless
@@ -65,7 +67,7 @@ class RustPlugin {
       '-e',
       `BIN=${binary}`,
       `-v`,
-      `${this.servicePath}:/code`,
+      `${this.dockerPath}:/code`,
       `-v`,
       `${cargoRegistry}:/root/.cargo/registry`,
       `-v`,
@@ -150,6 +152,7 @@ class RustPlugin {
       // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
       // for more information
       const artifactPath = path.join(
+        this.dockerPath,
         `target/lambda/${"dev" === profile ? "debug" : "release"}`,
         binary + ".zip"
       );
