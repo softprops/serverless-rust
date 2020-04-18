@@ -38,8 +38,8 @@ class RustPlugin {
       {
         cargoFlags: "",
         dockerTag: DEFAULT_DOCKER_TAG,
-        dockerImage: DEFAULT_DOCKER_IMAGE
-        servicePath: "asf",
+        dockerImage: DEFAULT_DOCKER_IMAGE,
+        servicePath: "asf"
       },
       (this.serverless.service.custom && this.serverless.service.custom.rust) ||
         {}
