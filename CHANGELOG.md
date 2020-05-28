@@ -1,6 +1,8 @@
 # ⚡ 0.4.0 (unreleased)
 
 * bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to `0.2.6-rust-1.43.0`
+* The docker image used to build artifacts is now configurable though the `custom.rust.dockerImage` `serverless.yml` config setting. The default remains `softprops/lambda-rust` [#65](https://github.com/softprops/serverless-rust/pull/65)
+* The docker cli is now configurable via `SLS_DOCKER_CLI` environment variable. The default is the first `docker` that resolves on your operating system's path. [#61](https://github.com/softprops/serverless-rust/pull/61)
 
 # ⚡ 0.3.7
 
