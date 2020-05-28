@@ -25,12 +25,12 @@
   "homepage": "https://github.com/softprops/serverless-rust#readme",
   "dependencies": {
     "fs-copy-file-sync": "^1.1.1",
-    "fs-extra": "^8.1.0",
-    "serverless": "^1.57.0"
+    "fs-extra": "^9.0.0",
+    "serverless": "^1.71.3"
   },
   "devDependencies": {
-    "eslint": "^6.5.1",
-    "prettier": "^1.18.2"
+    "eslint": "^7.1.0",
+    "prettier": "^2.0.5"
   },
   "files": [
     "index.js",
