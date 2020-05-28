@@ -29,7 +29,7 @@ class RustPlugin {
     this.servicePath = this.serverless.config.servicePath || "";
     this.hooks = {
       "before:package:createDeploymentArtifacts": this.build.bind(this),
-      "before:deploy:function:packageFunction": this.build.bind(this)
+      "before:deploy:function:packageFunction": this.build.bind(this),
     };
     if (includeInvokeHook(serverless.version)) {
       this.hooks["before:invoke:local:invoke"] = this.build.bind(this);
@@ -38,7 +38,7 @@ class RustPlugin {
       {
         cargoFlags: "",
         dockerTag: DEFAULT_DOCKER_TAG,
-        dockerImage: DEFAULT_DOCKER_IMAGE
+        dockerImage: DEFAULT_DOCKER_IMAGE,
       },
       (this.serverless.service.custom && this.serverless.service.custom.rust) ||
         {}
@@ -71,7 +71,7 @@ class RustPlugin {
       `-v`,
       `${cargoRegistry}:/root/.cargo/registry`,
       `-v`,
-      `${cargoDownloads}:/root/.cargo/git`
+      `${cargoDownloads}:/root/.cargo/git`,
     ];
     const customArgs = (process.env["SLS_DOCKER_ARGS"] || "").split(" ") || [];
 
@@ -97,8 +97,8 @@ class RustPlugin {
     const finalArgs = [
       ...defaultArgs,
       ...customArgs,
-      `${dockerImage}:${dockerTag}`
-    ].filter(i => i);
+      `${dockerImage}:${dockerTag}`,
+    ].filter((i) => i);
 
     this.serverless.cli.log(
       `Running container build with: ${dockerCLI}, args: ${finalArgs}.`
@@ -121,7 +121,7 @@ class RustPlugin {
       return;
     }
     let rustFunctionsFound = false;
-    this.functions().forEach(funcName => {
+    this.functions().forEach((funcName) => {
       const func = service.getFunction(funcName);
       const runtime = func.runtime || service.provider.runtime;
       if (runtime != RUST_RUNTIME) {
