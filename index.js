@@ -8,7 +8,7 @@ const { spawnSync } = require("child_process");
 const { homedir } = require("os");
 const path = require("path");
 
-const DEFAULT_DOCKER_TAG = "0.2.6-rust-1.39.0";
+const DEFAULT_DOCKER_TAG = "0.2.6-rust-1.43.0";
 const DEFAULT_DOCKER_IMAGE = "softprops/lambda-rust";
 const RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided";
