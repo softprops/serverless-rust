@@ -55,16 +55,16 @@ class RustPlugin {
   }
 
   runDocker(funcArgs, cargoPackage, binary, profile) {
-    const cargoHome = process.env.CARGO_HOME || path.join(homedir(), '.cargo');
-    const cargoRegistry = path.join(cargoHome, 'registry');
-    const cargoDownloads = path.join(cargoHome, 'git');
+    const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
+    const cargoRegistry = path.join(cargoHome, "registry");
+    const cargoDownloads = path.join(cargoHome, "git");
 
-    const dockerCLI = process.env['SLS_DOCKER_CLI'] || 'docker';
+    const dockerCLI = process.env["SLS_DOCKER_CLI"] || "docker";
     const defaultArgs = [
-      'run',
-      '--rm',
-      '-t',
-      '-e',
+      "run",
+      "--rm",
+      "-t",
+      "-e",
       `BIN=${binary}`,
       `-v`,
       `${this.dockerPath}:/code`,
@@ -73,12 +73,12 @@ class RustPlugin {
       `-v`,
       `${cargoDownloads}:/root/.cargo/git`
     ];
-    const customArgs = (process.env['SLS_DOCKER_ARGS'] || '').split(' ') || [];
+    const customArgs = (process.env["SLS_DOCKER_ARGS"] || "").split(" ") || [];
 
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
     if (profile) {
       // release or dev
-      customArgs.push('-e', `PROFILE=${profile}`);
+      customArgs.push("-e", `PROFILE=${profile}`);
     }
     if (cargoPackage != undefined) {
       if (cargoFlags) {
@@ -89,7 +89,7 @@ class RustPlugin {
     }
     if (cargoFlags) {
       // --features awesome-feature, ect
-      customArgs.push('-e', `CARGO_FLAGS=${cargoFlags}`);
+      customArgs.push("-e", `CARGO_FLAGS=${cargoFlags}`);
     }
     const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
     const dockerImage = (funcArgs || {}).dockerImage || this.custom.dockerImage;
