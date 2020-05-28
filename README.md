@@ -1,7 +1,7 @@
 # serverless rust [![Build Status](https://github.com/softprops/serverless-rust/workflows/Main/badge.svg)](https://github.com/softprops/serverless-rust/actions) [![npm](https://img.shields.io/npm/v/serverless-rust.svg)](https://www.npmjs.com/package/serverless-rust)
 
 
-> A ⚡ [Serverless framework](https://serverless.com/framework/) ⚡ plugin for [Rustlang](https://www.rust-lang.org/en-US/) applications 🦀
+> A ⚡ [Serverless framework](https://www.serverless.com/) ⚡ plugin for [Rustlang](https://www.rust-lang.org/en-US/) applications 🦀
 
 ## 📦 Install
 
