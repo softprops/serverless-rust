@@ -31,6 +31,7 @@ jobs:
       - name: Install Docker
         if: matrix.os == 'macOS-latest'
         run: |
+          # https://github.community/t/is-it-possible-to-install-and-configure-docker-on-macos-runner/16981/8
           brew install docker docker-machine-driver-xhyve
           sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
           sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
