@@ -1,5 +1,6 @@
 const assert = require("assert");
 const RustPlugin = require("../../index.js");
+const path = require("path");
 
 describe("RustPlugin", () => {
   it("sets sensible defaults", () => {
@@ -164,6 +165,58 @@ describe("RustPlugin", () => {
         RUSTFLAGS: " -Clinker=rust-lld",
         TARGET_CC: "rust-lld",
       },
+      "failed on windows"
+    );
+  });
+
+  it("configures expected localSourceDir", () => {
+    const plugin = new RustPlugin(
+      {
+        version: "1.71.3",
+        service: {
+          custom: {
+            rust: {
+              cargoFlags: "--features foo",
+              dockerImage: "notsoftprops/lambda-rust",
+              dockerTag: "latest",
+              dockerless: true,
+            },
+          },
+          package: {},
+        },
+        config: {},
+      },
+      {}
+    );
+
+    assert.equal(
+      plugin.localSourceDir("dev", "linux"),
+      path.join("target", "debug"),
+      "failed on linux"
+    );
+    assert.equal(
+      plugin.localSourceDir("release", "linux"),
+      path.join("target", "release"),
+      "failed on linux"
+    );
+    assert.equal(
+      plugin.localSourceDir("dev", "darwin"),
+      path.join("target", "x86_64-unknown-linux-musl", "debug"),
+      "failed on osx"
+    );
+    assert.equal(
+      plugin.localSourceDir("release", "darwin"),
+      path.join("target", "x86_64-unknown-linux-musl", "release"),
+      "failed on osx"
+    );
+    assert.equal(
+      plugin.localSourceDir("dev", "windows"),
+      path.join("target", "x86_64-unknown-linux-musl", "debug"),
+      "failed on windows"
+    );
+    assert.equal(
+      plugin.localSourceDir("release", "windows"),
+      path.join("target", "x86_64-unknown-linux-musl", "release"),
       "failed on windows"
     );
   });

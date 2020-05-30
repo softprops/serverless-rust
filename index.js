@@ -100,6 +100,22 @@ class RustPlugin {
     };
   }
 
+  localSourceDir(profile, platform) {
+    let executable = "target";
+    if (MUSL_PLATFORMS.includes(platform)) {
+      executable = path.join(executable, "x86_64-unknown-linux-musl");
+    }
+    return path.join(executable, profile !== "dev" ? "release" : "debug");
+  }
+
+  localArtifactDir(profile) {
+    return path.join(
+      "target",
+      "lambda",
+      profile !== "dev" ? "release" : "debug"
+    );
+  }
+
   localBuild(funcArgs, cargoPackage, binary, profile) {
     const args = this.localBuildArgs(
       funcArgs,
@@ -122,23 +138,15 @@ class RustPlugin {
       return buildResult;
     }
     // now rename binary and zip
-    let executable = "target";
-    if (MUSL_PLATFORMS.includes(platform())) {
-      executable = path.join(executable, "x86_64-unknown-linux-musl");
-    }
-    executable = path.join(executable, profile !== "dev" ? "release" : "debug");
+    const sourceDir = this.localSourceDir(profile, platform());
     const zip = new AdmZip();
     zip.addFile(
       "bootstrap",
-      readFileSync(path.join(executable, binary)),
+      readFileSync(path.join(sourceDir, binary)),
       "",
       755
     );
-    const targetDir = path.join(
-      "target",
-      "lambda",
-      profile !== "dev" ? "release" : "debug"
-    );
+    const targetDir = this.localArtifactDir(profile);
     try {
       mkdirSync(targetDir, { recursive: true });
     } catch {}
