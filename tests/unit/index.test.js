@@ -21,6 +21,13 @@ describe("RustPlugin", () => {
     },
     {}
   );
+
+  it("registers expected lifecycle hooks", () => {
+    assert.deepEqual(Object.keys(plugin.hooks), [
+      "before:package:createDeploymentArtifacts",
+      "before:deploy:function:packageFunction",
+    ]);
+  });
   it("sets sensible defaults", () => {
     const unconfigured = new RustPlugin(
       { version: "1.71.3", service: { package: {} }, config: {} },
