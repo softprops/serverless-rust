@@ -3,12 +3,30 @@ const RustPlugin = require("../../index.js");
 const path = require("path");
 
 describe("RustPlugin", () => {
+  const plugin = new RustPlugin(
+    {
+      version: "1.71.3",
+      service: {
+        custom: {
+          rust: {
+            cargoFlags: "--features foo",
+            dockerImage: "notsoftprops/lambda-rust",
+            dockerTag: "latest",
+            dockerless: true,
+          },
+        },
+        package: {},
+      },
+      config: {},
+    },
+    {}
+  );
   it("sets sensible defaults", () => {
-    const plugin = new RustPlugin(
+    const unconfigured = new RustPlugin(
       { version: "1.71.3", service: { package: {} }, config: {} },
       {}
     );
-    assert.deepEqual(plugin.custom, {
+    assert.deepEqual(unconfigured.custom, {
       cargoFlags: "",
       dockerImage: "softprops/lambda-rust",
       dockerTag: "0.2.7-rust-1.43.0",
@@ -17,7 +35,7 @@ describe("RustPlugin", () => {
   });
 
   it("uses services.custom.rust for default overrides", () => {
-    const plugin = new RustPlugin(
+    const configured = new RustPlugin(
       {
         version: "1.71.3",
         service: {
@@ -35,7 +53,7 @@ describe("RustPlugin", () => {
       },
       {}
     );
-    assert.deepEqual(plugin.custom, {
+    assert.deepEqual(configured.custom, {
       cargoFlags: "--features foo",
       dockerImage: "notsoftprops/lambda-rust",
       dockerTag: "latest",
@@ -44,24 +62,6 @@ describe("RustPlugin", () => {
   });
 
   it("resolves cargoBinary from handler name", () => {
-    const plugin = new RustPlugin(
-      {
-        version: "1.71.3",
-        service: {
-          custom: {
-            rust: {
-              cargoFlags: "--features foo",
-              dockerImage: "notsoftprops/lambda-rust",
-              dockerTag: "latest",
-              dockerless: true,
-            },
-          },
-          package: {},
-        },
-        config: {},
-      },
-      {}
-    );
     assert.deepEqual(plugin.cargoBinary({ handler: "foo" }), {
       cargoPackage: "foo",
       binary: "foo",
@@ -74,25 +74,6 @@ describe("RustPlugin", () => {
   });
 
   it("configures expected localBuildArgs", () => {
-    const plugin = new RustPlugin(
-      {
-        version: "1.71.3",
-        service: {
-          custom: {
-            rust: {
-              cargoFlags: "--features foo",
-              dockerImage: "notsoftprops/lambda-rust",
-              dockerTag: "latest",
-              dockerless: true,
-            },
-          },
-          package: {},
-        },
-        config: {},
-      },
-      {}
-    );
-
     assert.deepEqual(
       plugin.localBuildArgs({}, "foo", "bar", "release", "linux"),
       ["build", "-p", "foo", "--release", "--features", "foo"],
@@ -129,25 +110,6 @@ describe("RustPlugin", () => {
   });
 
   it("configures expected localBuildEnv", () => {
-    const plugin = new RustPlugin(
-      {
-        version: "1.71.3",
-        service: {
-          custom: {
-            rust: {
-              cargoFlags: "--features foo",
-              dockerImage: "notsoftprops/lambda-rust",
-              dockerTag: "latest",
-              dockerless: true,
-            },
-          },
-          package: {},
-        },
-        config: {},
-      },
-      {}
-    );
-
     assert.deepEqual(plugin.localBuildEnv({}, "linux"), {}, "failed on linux");
     assert.deepEqual(
       plugin.localBuildEnv({}, "darwin"),
@@ -170,25 +132,6 @@ describe("RustPlugin", () => {
   });
 
   it("configures expected localSourceDir", () => {
-    const plugin = new RustPlugin(
-      {
-        version: "1.71.3",
-        service: {
-          custom: {
-            rust: {
-              cargoFlags: "--features foo",
-              dockerImage: "notsoftprops/lambda-rust",
-              dockerTag: "latest",
-              dockerless: true,
-            },
-          },
-          package: {},
-        },
-        config: {},
-      },
-      {}
-    );
-
     assert.equal(
       plugin.localSourceDir("dev", "linux"),
       path.join("target", "debug"),
@@ -222,25 +165,6 @@ describe("RustPlugin", () => {
   });
 
   it("configures expected localArtifactDir", () => {
-    const plugin = new RustPlugin(
-      {
-        version: "1.71.3",
-        service: {
-          custom: {
-            rust: {
-              cargoFlags: "--features foo",
-              dockerImage: "notsoftprops/lambda-rust",
-              dockerTag: "latest",
-              dockerless: true,
-            },
-          },
-          package: {},
-        },
-        config: {},
-      },
-      {}
-    );
-
     assert.equal(
       plugin.localArtifactDir("dev"),
       path.join("target", "lambda", "debug"),
@@ -251,11 +175,10 @@ describe("RustPlugin", () => {
       path.join("target", "lambda", "release"),
       "failed on linux"
     );
-   
   });
 
   it("builds locally under expected conditions", () => {
-    const plugin = new RustPlugin(
+    const dockerless = new RustPlugin(
       {
         version: "1.71.3",
         service: {
@@ -273,8 +196,8 @@ describe("RustPlugin", () => {
       },
       {}
     );
-    assert(plugin.buildLocally({}));
+    assert(dockerless.buildLocally({}));
 
-    assert(plugin.buildLocally({ rust: { dockerless: true } }));
+    assert(dockerless.buildLocally({ rust: { dockerless: true } }));
   });
 });

@@ -233,6 +233,7 @@ class RustPlugin {
     return (func.rust || {}).dockerless || this.custom.dockerless;
   }
 
+  /** the entry point for building functions */
   build() {
     const service = this.serverless.service;
     if (service.provider.name != "aws") {
