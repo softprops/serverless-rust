@@ -24,7 +24,9 @@ function includeInvokeHook(serverlessVersion) {
   return majorVersion === 1 && minorVersion >= 38 && minorVersion < 40;
 }
 
-/** assumes docker is on the host's execution path */
+/** assumes docker is on the host's execution path for containerized builds
+ *  assumes cargo is on the host's execution path for local builds
+ */
 class RustPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
