@@ -58,7 +58,7 @@ class RustPlugin {
     this.serverless.service.package.excludeDevDependencies = false;
   }
 
-  localBuild(funcArgs, cargoPackage, binary, profile) {
+  localBuildArgs(funcArgs, cargoPackage, binary, profile, platform) {
     const defaultArgs = ["build", "-p", cargoPackage];
     const profileArgs = profile !== "dev" ? ["--release"] : [];
     const cargoFlags = (
@@ -66,42 +66,56 @@ class RustPlugin {
       this.custom.cargoFlags ||
       ""
     ).split(/\s+/);
-    const targetArgs = MUSL_PLATFORMS.includes(platform())
+    const targetArgs = MUSL_PLATFORMS.includes(platform)
       ? ["--target", "x86_64-unknown-linux-musl"]
       : [];
-    const finalArgs = [
+    return [
       ...defaultArgs,
       ...profileArgs,
       ...targetArgs,
       ...cargoFlags,
     ].filter((i) => i);
-    const defaultEnv = { ...process.env };
+  }
+
+  localBuildEnv(env, platform) {
+    const defaultEnv = { ...env };
     const platformEnv =
-      platform() === "darwin"
+      platform === "darwin"
         ? {
             RUSTFLAGS:
-              (process.env["RUSTFLAGS"] || "") +
-              " -Clinker=x86_64-linux-musl-gcc",
+              (env["RUSTFLAGS"] || "") + " -Clinker=x86_64-linux-musl-gcc",
             TARGET_CC: "x86_64-linux-musl-gcc",
             CC_x86_64_unknown_linux_musl: "x86_64-linux-musl-gcc",
           }
-        : platform() === "windows"
+        : platform === "windows"
         ? {
-            RUSTFLAGS: (process.env["RUSTFLAGS"] || "") + " -Clinker=rust-lld",
+            RUSTFLAGS: (env["RUSTFLAGS"] || "") + " -Clinker=rust-lld",
             TARGET_CC: "rust-lld",
             CC_x86_64_unknown_linux_musl: "rust-lld",
           }
         : {};
-    const finalEnv = {
+    return {
       ...defaultEnv,
       ...platformEnv,
     };
+  }
+
+  localBuild(funcArgs, cargoPackage, binary, profile) {
+    const args = this.localBuildArgs(
+      funcArgs,
+      cargoPackage,
+      binary,
+      profile,
+      platform()
+    );
+
+    const env = this.localBuildEnv(process.env, platform());
     this.serverless.cli.log("Running local cargo build");
 
-    const buildResult = spawnSync("cargo", finalArgs, {
+    const buildResult = spawnSync("cargo", args, {
       ...NO_OUTPUT_CAPTURE,
       ...{
-        env: finalEnv,
+        env: env,
       },
     });
     if (buildResult.error || buildResult.status > 0) {
@@ -225,7 +239,7 @@ class RustPlugin {
         return;
       }
       rustFunctionsFound = true;
-      const { cargoBinary, binary } = this.cargoBinary(func);
+      const { cargoPackage, binary } = this.cargoBinary(func);
 
       this.serverless.cli.log(`Building Rust ${func.handler} func...`);
       let profile = (func.rust || {}).profile || this.custom.profile;

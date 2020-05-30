@@ -22,7 +22,7 @@ describe("RustPlugin", () => {
         service: {
           custom: {
             rust: {
-              cargoFlags: "--feature foo",
+              cargoFlags: "--features foo",
               dockerImage: "notsoftprops/lambda-rust",
               dockerTag: "latest",
               dockerless: true,
@@ -35,7 +35,7 @@ describe("RustPlugin", () => {
       {}
     );
     assert.deepEqual(plugin.custom, {
-      cargoFlags: "--feature foo",
+      cargoFlags: "--features foo",
       dockerImage: "notsoftprops/lambda-rust",
       dockerTag: "latest",
       dockerless: true,
@@ -49,7 +49,7 @@ describe("RustPlugin", () => {
         service: {
           custom: {
             rust: {
-              cargoFlags: "--feature foo",
+              cargoFlags: "--features foo",
               dockerImage: "notsoftprops/lambda-rust",
               dockerTag: "latest",
               dockerless: true,
@@ -72,6 +72,61 @@ describe("RustPlugin", () => {
     });
   });
 
+  it("configures expected localBuildArgs", () => {
+    const plugin = new RustPlugin(
+      {
+        version: "1.71.3",
+        service: {
+          custom: {
+            rust: {
+              cargoFlags: "--features foo",
+              dockerImage: "notsoftprops/lambda-rust",
+              dockerTag: "latest",
+              dockerless: true,
+            },
+          },
+          package: {},
+        },
+        config: {},
+      },
+      {}
+    );
+
+    assert.deepEqual(
+      plugin.localBuildArgs({}, "foo", "bar", "release", "linux"),
+      ["build", "-p", "foo", "--release", "--features", "foo"],
+      "failed on linux"
+    );
+    assert.deepEqual(
+      plugin.localBuildArgs({}, "foo", "bar", "release", "darwin"),
+      [
+        "build",
+        "-p",
+        "foo",
+        "--release",
+        "--target",
+        "x86_64-unknown-linux-musl",
+        "--features",
+        "foo",
+      ],
+      "failed on osx"
+    );
+    assert.deepEqual(
+      plugin.localBuildArgs({}, "foo", "bar", "release", "windows"),
+      [
+        "build",
+        "-p",
+        "foo",
+        "--release",
+        "--target",
+        "x86_64-unknown-linux-musl",
+        "--features",
+        "foo",
+      ],
+      "failed on windows"
+    );
+  });
+
   it("builds locally under expected conditions", () => {
     const plugin = new RustPlugin(
       {
@@ -79,7 +134,7 @@ describe("RustPlugin", () => {
         service: {
           custom: {
             rust: {
-              cargoFlags: "--feature foo",
+              cargoFlags: "--features foo",
               dockerImage: "notsoftprops/lambda-rust",
               dockerTag: "latest",
               dockerless: true,

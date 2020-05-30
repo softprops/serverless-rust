@@ -11,7 +11,7 @@ jobs:
       - name: Install
         run: npm ci
       - name: Lint
-        run: num run lint
+        run: npm run lint
       - name: Test
         run: npm test
   integration-test:
