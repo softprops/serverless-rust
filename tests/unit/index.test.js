@@ -221,6 +221,39 @@ describe("RustPlugin", () => {
     );
   });
 
+  it("configures expected localArtifactDir", () => {
+    const plugin = new RustPlugin(
+      {
+        version: "1.71.3",
+        service: {
+          custom: {
+            rust: {
+              cargoFlags: "--features foo",
+              dockerImage: "notsoftprops/lambda-rust",
+              dockerTag: "latest",
+              dockerless: true,
+            },
+          },
+          package: {},
+        },
+        config: {},
+      },
+      {}
+    );
+
+    assert.equal(
+      plugin.localArtifactDir("dev"),
+      path.join("target", "lambda", "debug"),
+      "failed on linux"
+    );
+    assert.equal(
+      plugin.localArtifactDir("release"),
+      path.join("target", "lambda", "release"),
+      "failed on linux"
+    );
+   
+  });
+
   it("builds locally under expected conditions", () => {
     const plugin = new RustPlugin(
       {

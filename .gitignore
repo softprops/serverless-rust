@@ -5,3 +5,4 @@ tests/test-func-dev/test-out.log
 tests/test-func/local-out.log
 tests/test-func-dev/local-out.log
 .serverless
+coverage

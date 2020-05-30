@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "npx prettier --check '**.js'",
-    "test": "npx jest",
+    "test": "npx jest --collectCoverage",
     "test:integration": "./tests/integration/test.sh",
     "fmt": "npx prettier --write '**.js'"
   },
