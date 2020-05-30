@@ -11,6 +11,11 @@ package:
 plugins:
   - serverless-rust
 
+custom:
+  rust:
+    profile: dev
+    dockerless: true
+
 functions:
   hello:
     handler: test-func

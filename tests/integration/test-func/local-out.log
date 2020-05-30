@@ -1,0 +1,15 @@
+  Error --------------------------------------------------
+  Error: Failed to run docker for rust image (exit code 1})
+      at /Users/doug/code/rust/serverless-rust/tests/integration/test-func/node_modules/serverless/lib/plugins/aws/invokeLocal/index.js:488:21
+     For debugging logs, run again after setting the "SLS_DEBUG=*" environment variable.
+  Get Support --------------------------------------------
+     Docs:          docs.serverless.com
+     Bugs:          github.com/serverless/serverless/issues
+     Issues:        forum.serverless.com
+  Your Environment Information ---------------------------
+     Operating System:          darwin
+     Node Version:              14.2.0
+     Framework Version:         1.71.3
+     Plugin Version:            3.6.12
+     SDK Version:               2.3.1
+     Components Version:        2.30.11

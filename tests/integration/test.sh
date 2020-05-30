@@ -3,14 +3,14 @@
 # Directory of the integration test
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # Root directory of the repository
-DIST=$(cd $HERE/..; pwd)
+DIST=$(cd $HERE/../..; pwd)
 export SILENT=1
 # uncomment below to debug serverless framework
 #export SLS_DEBUG=*
 
 source "${HERE}"/bashtest.sh
 
-for project in  test-func test-func-dev; do
+for project in test-func test-func-dev; do
 
     cd "${HERE}"/"${project}"
     echo "👩‍🔬 Running tests for $project"

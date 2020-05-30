@@ -55,6 +55,10 @@ custom:
     cargoFlags: '--features enable-awesome'
     # custom docker tag
     dockerTag: 'some-custom-tag'
+    #  custom docker image
+    dockerImage: 'dockerUser/dockerRepo'
+    # experimental! when set to true, artifacts are built locally outside of docker
+    dockerless: true
 ```
 
 ### 🎨 Per function customization

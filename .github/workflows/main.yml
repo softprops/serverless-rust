@@ -10,6 +10,8 @@ jobs:
         uses: actions/checkout@v1
       - name: Install
         run: npm ci
+      - name: Lint
+        run: num run lint
       - name: Test
         run: npm test
   integration-test:
@@ -18,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Test
-        run: tests/test.sh
+        run: npm run test:integration
   publish:
     needs: [unit-test, integration-test]
     runs-on: ubuntu-latest
