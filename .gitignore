@@ -1,8 +1,8 @@
 node_modules
 target
-tests/test-func/test-out.log
-tests/test-func-dev/test-out.log
-tests/test-func/local-out.log
-tests/test-func-dev/local-out.log
+tests/integration/test-func/test-out.log
+tests/integration/test-func-dev/test-out.log
+tests/integration/test-func/local-out.log
+tests/integration/test-func-dev/local-out.log
 .serverless
 coverage
