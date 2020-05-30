@@ -32,6 +32,7 @@ jobs:
         if: matrix.os == 'macOS-latest'
         run: brew install filosottile/musl-cross/musl-cross
       - name: Test
+        shell: bash
         run: npm run test:integration
   publish:
     needs: [unit-test, integration-test]
