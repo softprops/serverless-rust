@@ -48,6 +48,9 @@ class RustPlugin {
         {}
     );
 
+    // Docker can't access resources outside of the current build directory.
+    // This poses a problem if the serverless yaml is inside a workspace,
+    // and we want pull in other packages from the workspace
     this.dockerPath = path.resolve(this.custom.dockerPath || this.servicePath);
 
     // By default, Serverless examines node_modules to figure out which
@@ -162,12 +165,16 @@ class RustPlugin {
     }
   }
 
-  dockerBuild(funcArgs, cargoPackage, binary, profile) {
-    const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
-    const cargoRegistry = path.join(cargoHome, "registry");
-    const cargoDownloads = path.join(cargoHome, "git");
-
-    const dockerCLI = process.env["SLS_DOCKER_CLI"] || "docker";
+  dockerBuildArgs(
+    funcArgs,
+    cargoPackage,
+    binary,
+    profile,
+    srcPath,
+    cargoRegistry,
+    cargoDownloads,
+    env
+  ) {
     const defaultArgs = [
       "run",
       "--rm",
@@ -175,14 +182,13 @@ class RustPlugin {
       "-e",
       `BIN=${binary}`,
       `-v`,
-      `${this.dockerPath}:/code`,
+      `${srcPath}:/code`,
       `-v`,
       `${cargoRegistry}:/root/.cargo/registry`,
       `-v`,
       `${cargoDownloads}:/root/.cargo/git`,
     ];
-    const customArgs = (process.env["SLS_DOCKER_ARGS"] || "").split(" ") || [];
-
+    const customArgs = (env["SLS_DOCKER_ARGS"] || "").split(" ") || [];
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
     if (profile) {
       // release or dev
@@ -202,15 +208,33 @@ class RustPlugin {
     const dockerTag = (funcArgs || {}).dockerTag || this.custom.dockerTag;
     const dockerImage = (funcArgs || {}).dockerImage || this.custom.dockerImage;
 
-    const finalArgs = [
+    return [
       ...defaultArgs,
       ...customArgs,
       `${dockerImage}:${dockerTag}`,
     ].filter((i) => i);
+  }
+
+  dockerBuild(funcArgs, cargoPackage, binary, profile) {
+    const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
+    const cargoRegistry = path.join(cargoHome, "registry");
+    const cargoDownloads = path.join(cargoHome, "git");
+
+    const dockerCLI = process.env["SLS_DOCKER_CLI"] || "docker";
+    const args = this.dockerBuildArgs(
+      funcArgs,
+      cargoPackage,
+      binary,
+      profile,
+      srcPath,
+      cargoRegistry,
+      cargoDownloads,
+      process.env
+    );
 
     this.serverless.cli.log("Running containerized build");
 
-    return spawnSync(dockerCLI, finalArgs, NO_OUTPUT_CAPTURE);
+    return spawnSync(dockerCLI, args, NO_OUTPUT_CAPTURE);
   }
 
   functions() {

@@ -200,4 +200,37 @@ describe("RustPlugin", () => {
 
     assert(dockerless.buildLocally({ rust: { dockerless: true } }));
   });
+
+  it("configures expected dockerBuildArgs", () => {
+    assert.deepEqual(
+      plugin.dockerBuildArgs(
+        {},
+        "foo",
+        "bar",
+        "release",
+        "source_path",
+        "cargo_registry",
+        "cargo_downloads",
+        {}
+      ),
+      [
+        "run",
+        "--rm",
+        "-t",
+        "-e",
+        "BIN=bar",
+        "-v",
+        "source_path:/code",
+        "-v",
+        "cargo_registry:/root/.cargo/registry",
+        "-v",
+        "cargo_downloads:/root/.cargo/git",
+        "-e",
+        "PROFILE=release",
+        "-e",
+        "CARGO_FLAGS=--features foo -p foo",
+        "notsoftprops/lambda-rust:latest",
+      ]
+    );
+  });
 });
