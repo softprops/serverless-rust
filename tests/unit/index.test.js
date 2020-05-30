@@ -127,6 +127,47 @@ describe("RustPlugin", () => {
     );
   });
 
+  it("configures expected localBuildEnv", () => {
+    const plugin = new RustPlugin(
+      {
+        version: "1.71.3",
+        service: {
+          custom: {
+            rust: {
+              cargoFlags: "--features foo",
+              dockerImage: "notsoftprops/lambda-rust",
+              dockerTag: "latest",
+              dockerless: true,
+            },
+          },
+          package: {},
+        },
+        config: {},
+      },
+      {}
+    );
+
+    assert.deepEqual(plugin.localBuildEnv({}, "linux"), {}, "failed on linux");
+    assert.deepEqual(
+      plugin.localBuildEnv({}, "darwin"),
+      {
+        CC_x86_64_unknown_linux_musl: "x86_64-linux-musl-gcc",
+        RUSTFLAGS: " -Clinker=x86_64-linux-musl-gcc",
+        TARGET_CC: "x86_64-linux-musl-gcc",
+      },
+      "failed on osx"
+    );
+    assert.deepEqual(
+      plugin.localBuildEnv({}, "windows"),
+      {
+        CC_x86_64_unknown_linux_musl: "rust-lld",
+        RUSTFLAGS: " -Clinker=rust-lld",
+        TARGET_CC: "rust-lld",
+      },
+      "failed on windows"
+    );
+  });
+
   it("builds locally under expected conditions", () => {
     const plugin = new RustPlugin(
       {
