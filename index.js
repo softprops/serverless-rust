@@ -15,7 +15,7 @@ const DEFAULT_DOCKER_IMAGE = "softprops/lambda-rust";
 const RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
-const MUSL_PLATFORMS = ["darwin", "windows"];
+const MUSL_PLATFORMS = ["darwin", "windows", "linux"];
 
 function includeInvokeHook(serverlessVersion) {
   let [major, minor] = serverlessVersion.split(".");

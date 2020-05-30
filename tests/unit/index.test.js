@@ -76,7 +76,16 @@ describe("RustPlugin", () => {
   it("configures expected localBuildArgs", () => {
     assert.deepEqual(
       plugin.localBuildArgs({}, "foo", "bar", "release", "linux"),
-      ["build", "-p", "foo", "--release", "--features", "foo"],
+      [
+        "build",
+        "-p",
+        "foo",
+        "--release",
+        "--target",
+        "x86_64-unknown-linux-musl",
+        "--features",
+        "foo",
+      ],
       "failed on linux"
     );
     assert.deepEqual(
@@ -110,7 +119,15 @@ describe("RustPlugin", () => {
   });
 
   it("configures expected localBuildEnv", () => {
-    assert.deepEqual(plugin.localBuildEnv({}, "linux"), {}, "failed on linux");
+    assert.deepEqual(
+      plugin.localBuildEnv({}, "linux"),
+      {
+        CC_x86_64_unknown_linux_musl: "rust-lld",
+        RUSTFLAGS: " -Clinker=rust-lld",
+        TARGET_CC: "rust-lld",
+      },
+      "failed on linux"
+    );
     assert.deepEqual(
       plugin.localBuildEnv({}, "darwin"),
       {
@@ -134,12 +151,12 @@ describe("RustPlugin", () => {
   it("configures expected localSourceDir", () => {
     assert.equal(
       plugin.localSourceDir("dev", "linux"),
-      path.join("target", "debug"),
+      path.join("target", "x86_64-unknown-linux-musl", "debug"),
       "failed on linux"
     );
     assert.equal(
       plugin.localSourceDir("release", "linux"),
-      path.join("target", "release"),
+      path.join("target", "x86_64-unknown-linux-musl", "release"),
       "failed on linux"
     );
     assert.equal(
