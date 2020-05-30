@@ -84,13 +84,14 @@ class RustPlugin {
 
   localBuildEnv(env, platform) {
     const defaultEnv = { ...env };
-    const platformEnv = MUSL_PLATFORMS.includes(platform)
-      ? {
-          RUSTFLAGS: (env["RUSTFLAGS"] || "") + " -Clinker=rust-lld",
-          TARGET_CC: "rust-lld",
-          CC_x86_64_unknown_linux_musl: "rust-lld",
-        }
-      : {};
+    const platformEnv =
+      MUSL_PLATFORMS.includes(platform) && platform !== "linux"
+        ? {
+            RUSTFLAGS: (env["RUSTFLAGS"] || "") + " -Clinker=rust-lld",
+            TARGET_CC: "rust-lld",
+            CC_x86_64_unknown_linux_musl: "rust-lld",
+          }
+        : {};
     return {
       ...defaultEnv,
       ...platformEnv,

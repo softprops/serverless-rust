@@ -126,15 +126,7 @@ describe("RustPlugin", () => {
   });
 
   it("configures expected localBuildEnv", () => {
-    assert.deepEqual(
-      plugin.localBuildEnv({}, "linux"),
-      {
-        CC_x86_64_unknown_linux_musl: "rust-lld",
-        RUSTFLAGS: " -Clinker=rust-lld",
-        TARGET_CC: "rust-lld",
-      },
-      "failed on linux"
-    );
+    assert.deepEqual(plugin.localBuildEnv({}, "linux"), {}, "failed on linux");
     assert.deepEqual(
       plugin.localBuildEnv({}, "darwin"),
       {
