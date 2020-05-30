@@ -114,9 +114,9 @@ describe("RustPlugin", () => {
     assert.deepEqual(
       plugin.localBuildEnv({}, "darwin"),
       {
-        CC_x86_64_unknown_linux_musl: "x86_64-linux-musl-gcc",
-        RUSTFLAGS: " -Clinker=x86_64-linux-musl-gcc",
-        TARGET_CC: "x86_64-linux-musl-gcc",
+        CC_x86_64_unknown_linux_musl: "rust-lld",
+        RUSTFLAGS: " -Clinker=rust-lld",
+        TARGET_CC: "rust-lld",
       },
       "failed on osx"
     );

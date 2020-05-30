@@ -28,9 +28,10 @@ jobs:
         with:
           rust-version: stable
           targets: x86_64-unknown-linux-musl
-      - name: Install Cross Compiler
-        if: matrix.os == 'macOS-latest'
-        run: brew install filosottile/musl-cross/musl-cross
+      # experimenting with osx and the vendored rust-lld linker
+      # - name: Install Cross Compiler
+      #   if: matrix.os == 'macOS-latest'
+      #   run: brew install filosottile/musl-cross/musl-cross
       - name: Test
         shell: bash
         run: npm run test:integration

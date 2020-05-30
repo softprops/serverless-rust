@@ -61,7 +61,7 @@ custom:
     dockerless: true
 ```
 
-> Note. `dockerless` mode is experimental. On osx it requires a separate installation of a musl cross compile linker which you can install with `brew install filosottile/musl-cross/musl-cross` Windows and docker will both have to install a separate target with `rustup target add x86_64-unknown-linux-musl`
+> Note. `dockerless` mode is experimental. Windows and OSX will both have to install a separate target with `rustup target add x86_64-unknown-linux-musl`
 
 ### 🎨 Per function customization
 
