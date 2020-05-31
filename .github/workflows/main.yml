@@ -45,6 +45,7 @@ jobs:
           name: ${{ matrix.os }}-lambda
           path: tests/integration/test-func/target/lambda/release/test-func.zip
   local-runs:
+    needs: [local-builds]
     runs-on: ubuntu-latest
     steps:
       - name: Download lambdas
