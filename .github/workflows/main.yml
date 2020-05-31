@@ -81,7 +81,7 @@ jobs:
           echo "running ubuntu-latest-lambda"
           ls -al lambdas/ubuntu-latest-lambda
           unzip -o  \
-            lambdas/macox-latest-lambda/test-func.zip \
+            lambdas/ubuntu-latest-lambda/test-func.zip \
             -d /tmp/ubuntu-latest-lambda
           docker run \
             -i --rm \
