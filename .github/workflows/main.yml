@@ -74,7 +74,7 @@ jobs:
             -d /tmp/windows-latest-lambda
           docker run \
             -i --rm \
-            -v /tmp/lambda:/var/task:ro,delegated \
+            -v /tmp/windows-latest-lambda:/var/task:ro,delegated \
             lambci/lambda:provided 'test-func' '{"some": "event"}'
       - name: Run ubuntu-latest-lambda
         run: |
