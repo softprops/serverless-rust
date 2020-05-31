@@ -58,7 +58,7 @@ jobs:
         run: |
           echo "running macox-latest-lambda"
           unzip -o  \
-            lambda/macox-latest-lambda/test-func.zip \
+            lambdas/macox-latest-lambda/test-func.zip \
             -d /tmp/macox-latest-lambda > /dev/null 2>&1 && \
           docker run \
             -i --rm \
@@ -68,7 +68,7 @@ jobs:
         run: |
           echo "running windows-latest-lambda"
           unzip -o  \
-            lambda/windows-latest-lambda/test-func.zip \
+            lambdas/windows-latest-lambda/test-func.zip \
             -d /tmp/windows-latest-lambda > /dev/null 2>&1 && \
           docker run \
             -i --rm \
@@ -78,7 +78,7 @@ jobs:
         run: |
           echo "running ubuntu-latest-lambda"
           unzip -o  \
-            lambda/macox-latest-lambda/test-func.zip \
+            lambdas/macox-latest-lambda/test-func.zip \
             -d /tmp/ubuntu-latest-lambda > /dev/null 2>&1 && \
           docker run \
             -i --rm \
