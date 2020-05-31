@@ -14,6 +14,32 @@ jobs:
         run: npm run lint
       - name: Test
         run: npm test
+  local-builds:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Rust
+        uses: hecrj/setup-rust-action@v1
+        with:
+          rust-version: stable
+          targets: x86_64-unknown-linux-musl
+      - name: Install MUSL tools
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+      - name: Build
+        run: |
+          cd tests/integration/test-func
+          npm ci -D ../../.. --silent
+          npx serverless package
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.os }}-lambda
+          path: tests/integration/test-func/target/lambda/release/test-func.zip
   integration-test:
     strategy:
       matrix:
