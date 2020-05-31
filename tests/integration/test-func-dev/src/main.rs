@@ -1,13 +1,10 @@
-use lambda_runtime::{error::HandlerError, lambda, Context};
+use lambda::lambda;
 use serde_json::Value;
 
-fn main() {
-    lambda!(handler)
-}
+type Error = Box<dyn std::error::Error + Sync + Send + 'static>;
 
-fn handler(
-    event: Value,
-    _: Context,
-) -> Result<Value, HandlerError> {
+#[lambda]
+#[tokio::main]
+async fn main(event: Value) -> Result<Value, Error> {
     Ok(event)
 }
