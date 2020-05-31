@@ -56,8 +56,8 @@ jobs:
         run: ls -alh lambdas/
       - name: Run macos-latest-lambda
         run: |
-          echo "running macox-latest-lambda"
-          ls -al lambdas/macox-latest-lambda
+          echo "running macos-latest-lambda"
+          ls -al lambdas/macos-latest-lambda
           unzip -o  \
             lambdas/macos-latest-lambda/test-func.zip \
             -d /tmp/macos-latest-lambda
