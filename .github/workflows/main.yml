@@ -54,9 +54,40 @@ jobs:
           path: lambdas
       - name: List Lambdas
         run: ls -alh lambdas/
+      - name: Run macox-latest-lambda
+        run: |
+          echo "running macox-latest-lambda"
+          unzip -o  \
+            lambda/macox-latest-lambda/test-func.zip \
+            -d /tmp/macox-latest-lambda > /dev/null 2>&1 && \
+          docker run \
+            -i --rm \
+            -v /tmp/macox-latest-lambda:/var/task:ro,delegated \
+            lambci/lambda:provided 'test-func' '{"some": "event"}'
+      - name: Run windows-latest-lambda
+        run: |
+          echo "running windows-latest-lambda"
+          unzip -o  \
+            lambda/windows-latest-lambda/test-func.zip \
+            -d /tmp/windows-latest-lambda > /dev/null 2>&1 && \
+          docker run \
+            -i --rm \
+            -v /tmp/lambda:/var/task:ro,delegated \
+            lambci/lambda:provided 'test-func' '{"some": "event"}'
+      - name: Run ubuntu-latest-lambda
+        run: |
+          echo "running ubuntu-latest-lambda"
+          unzip -o  \
+            lambda/macox-latest-lambda/test-func.zip \
+            -d /tmp/ubuntu-latest-lambda > /dev/null 2>&1 && \
+          docker run \
+            -i --rm \
+            -v /tmp/ubuntu-latest-lambda:/var/task:ro,delegated \
+            lambci/lambda:provided 'test-func' '{"some": "event"}'
   integration-test:
     strategy:
       matrix:
+        # docker isn't available on macox-latest or windows-latest
         os: [ubuntu-latest]
         rust: [stable]
     runs-on: ${{ matrix.os }}
@@ -71,37 +102,6 @@ jobs:
       - name: Install MUSL tools
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get update && sudo apt-get install -y musl-tools
-      # - name: Install Docker
-      #   if: matrix.os == 'macOS-latest'
-      #   run: |
-      #     # https://github.community/t/is-it-possible-to-install-and-configure-docker-on-macos-runner/16981/8
-      #     brew install docker docker-machine-driver-xhyve
-      #     sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
-      #     sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
-      #     while ! docker-machine create --driver xhyve default; do
-      #       docker-machine rm -f default
-      #       sleep 1;
-      #     done
-      #     # Export variable (this target)
-      #     eval "$(docker-machine env default)"
-      #     DOCKER_TLS_VERIFY="$( docker-machine env default | grep DOCKER_TLS_VERIFY | sed -e 's/.*="//g' -e 's/"$//g' )"
-      #     DOCKER_HOST="$( docker-machine env default | grep DOCKER_HOST | sed -e 's/.*="//g' -e 's/"$//g' )"
-      #     DOCKER_CERT_PATH="$( docker-machine env default | grep DOCKER_CERT_PATH | sed -e 's/.*="//g' -e 's/"$//g' )"
-      #     DOCKER_MACHINE_NAME="$( docker-machine env default | grep DOCKER_MACHINE_NAME | sed -e 's/.*="//g' -e 's/"$//g' )"
-      #     # Export variable (this other targets)
-      #     # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/development-tools-for-github-actions#set-an-environment-variable-set-env
-      #     echo ::set-env name=DOCKER_TLS_VERIFY::${DOCKER_TLS_VERIFY}
-      #     echo ::set-env name=DOCKER_HOST::${DOCKER_HOST}
-      #     echo ::set-env name=DOCKER_CERT_PATH::${DOCKER_CERT_PATH}
-      #     echo ::set-env name=DOCKER_MACHINE_NAME::${DOCKER_MACHINE_NAME}
-      #     # Show info
-      #     docker-machine ls
-      #     docker-machine env default
-      #     docker version
-      # experimenting with osx and the vendored rust-lld linker
-      # - name: Install Cross Compiler
-      #   if: matrix.os == 'macOS-latest'
-      #   run: brew install filosottile/musl-cross/musl-cross
       - name: Test
         shell: bash
         run: npm run test:integration
