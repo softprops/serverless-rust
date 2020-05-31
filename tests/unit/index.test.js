@@ -110,7 +110,7 @@ describe("RustPlugin", () => {
       "failed on osx"
     );
     assert.deepEqual(
-      plugin.localBuildArgs({}, "foo", "bar", "release", "windows"),
+      plugin.localBuildArgs({}, "foo", "bar", "release", "win32"),
       [
         "build",
         "-p",
@@ -138,7 +138,7 @@ describe("RustPlugin", () => {
       "failed on osx"
     );
     assert.deepEqual(
-      plugin.localBuildEnv({}, "windows"),
+      plugin.localBuildEnv({}, "win32"),
       {
         CC_x86_64_unknown_linux_musl: "rust-lld",
         RUSTFLAGS: " -Clinker=rust-lld",
@@ -170,12 +170,12 @@ describe("RustPlugin", () => {
       "failed on osx"
     );
     assert.equal(
-      plugin.localSourceDir("dev", "windows"),
+      plugin.localSourceDir("dev", "win32"),
       path.join("target", "x86_64-unknown-linux-musl", "debug"),
       "failed on windows"
     );
     assert.equal(
-      plugin.localSourceDir("release", "windows"),
+      plugin.localSourceDir("release", "win32"),
       path.join("target", "x86_64-unknown-linux-musl", "release"),
       "failed on windows"
     );

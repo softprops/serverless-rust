@@ -15,7 +15,7 @@ const DEFAULT_DOCKER_IMAGE = "softprops/lambda-rust";
 const RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
-const MUSL_PLATFORMS = ["darwin", "windows", "linux"];
+const MUSL_PLATFORMS = ["darwin", "win32", "linux"];
 
 function includeInvokeHook(serverlessVersion) {
   let [major, minor] = serverlessVersion.split(".");
@@ -85,7 +85,7 @@ class RustPlugin {
   localBuildEnv(env, platform) {
     const defaultEnv = { ...env };
     const platformEnv =
-      "windows" === platform
+      "win32" === platform
         ? {
             RUSTFLAGS: (env["RUSTFLAGS"] || "") + " -Clinker=rust-lld",
             TARGET_CC: "rust-lld",
