@@ -44,6 +44,15 @@ jobs:
         with:
           name: ${{ matrix.os }}-lambda
           path: tests/integration/test-func/target/lambda/release/test-func.zip
+  local-runs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download lambdas
+        uses: actions/download-artifact@v1
+        with:
+          path: lambdas
+      - name: List Lambdas
+        run: ls -alh lambdas/
   integration-test:
     strategy:
       matrix:
