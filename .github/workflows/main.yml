@@ -27,9 +27,12 @@ jobs:
         with:
           rust-version: stable
           targets: x86_64-unknown-linux-musl
-      - name: Install MUSL tools
+      - name: Install MUSL tools (linux)
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get update && sudo apt-get install -y musl-tools
+      - name: Install MUSL cross tools (osx)
+        if: matrix.os == 'macos-latest'
+        run: brew install filosottile/musl-cross/musl-cross
       - name: Build
         run: |
           cd tests/integration/test-func
