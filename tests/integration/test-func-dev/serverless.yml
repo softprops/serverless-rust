@@ -14,7 +14,6 @@ plugins:
 custom:
   rust:
     profile: dev
-    dockerless: true
 
 functions:
   hello:
