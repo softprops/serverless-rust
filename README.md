@@ -63,7 +63,10 @@ custom:
 
 While it's useful to have a build environment match your deployment
 environment, dockerized builds do come with some notable tradeoffs.
-The external dependency on docker itself often causes friction as an added dependency to your build. If you wish to build lambda's locally, this plugin also supports an experimental `dockerless` mode. 
+
+The external dependency on docker itself often causes friction as an added dependency to your build. Depending on the docker image limited which versions of rust you could deploy with. The docker image tracked stable rust. Some users might wish to try unstable versions early. Local builds enable that.
+
+If you wish to build lambda's locally, this plugin also supports an experimental `dockerless` mode. 
 
 ```diff
 custom:
