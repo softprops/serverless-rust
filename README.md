@@ -62,8 +62,8 @@ custom:
 ### 🥼 (experimental) local builds
 
 While it's useful to have a build environment match your deployment
-environment dockerized builds do come with some notable tradeoffs.
-The external dependency on docker itself often causes friction in an added dependency to your build. If you wish to build lambda's locally, this plugin also supports an experimental `dockerless` mode. 
+environment, dockerized builds do come with some notable tradeoffs.
+The external dependency on docker itself often causes friction as an added dependency to your build. If you wish to build lambda's locally, this plugin also supports an experimental `dockerless` mode. 
 
 ```diff
 custom:
