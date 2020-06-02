@@ -53,7 +53,7 @@ class RustPlugin {
     // Docker can't access resources outside of the current build directory.
     // This poses a problem if the serverless yaml is inside a workspace,
     // and we want pull in other packages from the workspace
-    this.dockerPath = path.resolve(this.custom.dockerPath || this.servicePath);
+    this.srcPath = path.resolve(this.custom.dockerPath || this.servicePath);
 
     // By default, Serverless examines node_modules to figure out which
     // packages there are from dependencies versus devDependencies of a
@@ -228,7 +228,7 @@ class RustPlugin {
       cargoPackage,
       binary,
       profile,
-      srcPath,
+      this.srcPath,
       cargoRegistry,
       cargoDownloads,
       process.env
@@ -298,7 +298,7 @@ class RustPlugin {
       // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
       // for more information
       const artifactPath = path.join(
-        this.dockerPath,
+        this.srcPath,
         `target/lambda/${"dev" === profile ? "debug" : "release"}`,
         `${binary}.zip`
       );
