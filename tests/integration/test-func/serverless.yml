@@ -13,4 +13,6 @@ plugins:
 
 functions:
   hello:
+    rust:
+      dockerless: true
     handler: test-func

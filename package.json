@@ -1,11 +1,13 @@
 {
   "name": "serverless-rust",
-  "version": "0.3.7",
+  "version": "0.4.0",
   "description": "Serverless framework plugin for Rustlang applications",
   "main": "index.js",
   "scripts": {
-    "test": "eslint *.js && prettier --check '*.js'",
-    "fmt": "prettier --write '*.js'"
+    "lint": "npx prettier --check '**.js'",
+    "test": "npx jest --collectCoverage",
+    "test:integration": "./tests/integration/test.sh",
+    "fmt": "npx prettier --write '**.js'"
   },
   "repository": {
     "type": "git",
@@ -29,7 +31,9 @@
     "serverless": "^1.71.3"
   },
   "devDependencies": {
-    "eslint": "^7.1.0",
+    "adm-zip": "^0.4.14",
+    "jest": "^26.0.1",
+    "jest-circus": "^26.0.1",
     "prettier": "^2.0.5"
   },
   "files": [
