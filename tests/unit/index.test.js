@@ -36,7 +36,7 @@ describe("RustPlugin", () => {
     assert.deepEqual(unconfigured.custom, {
       cargoFlags: "",
       dockerImage: "softprops/lambda-rust",
-      dockerTag: "0.2.7-rust-1.43.0",
+      dockerTag: "0.2.7-rust-1.43.1",
       dockerless: false,
     });
   });
