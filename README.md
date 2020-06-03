@@ -1,7 +1,25 @@
-# serverless rust [![Build Status](https://github.com/softprops/serverless-rust/workflows/Main/badge.svg)](https://github.com/softprops/serverless-rust/actions) [![npm](https://img.shields.io/npm/v/serverless-rust.svg)](https://www.npmjs.com/package/serverless-rust)
+<div align="center">
+   ⚡ 🦀
+</div>
 
+<h1 align="center">
+  serverless-rust
+</h1>
 
-> A ⚡ [Serverless framework](https://www.serverless.com/framework/docs/) ⚡ plugin for [Rustlang](https://www.rust-lang.org/) applications 🦀
+<p align="center">
+   A ⚡ <a href="https://www.serverless.com/framework/docs/">Serverless framework</a> ⚡ plugin for <a href="https://www.rust-lang.org/">Rustlang</a> applications
+</p>
+
+<div align="center">
+  <a href="https://github.com/softprops/serverless-rust/actions">
+    <img alt="GitHub actions build badge" src="https://github.com/softprops/serverless-rust/workflows/Main/badge.svg"/>
+  </a>
+  <a href="https://www.npmjs.com/package/serverless-rust">
+    <img alt="npm release badge" src="https://img.shields.io/npm/v/serverless-rust.svg"/>
+  </a>
+</div>
+
+<br />
 
 ## 📦 Install
 
@@ -39,7 +57,7 @@ functions:
           method: GET
 ```
 
-> 💡 The Rust Lambda runtime requires a binary named `bootstrap`. This plugin renames the binary cargo builds to `bootstrap` for you before packaging. You do **not** need to do this manually in your Cargo.toml configuration file.
+> 💡 The Rust Lambda runtime requires a binary named `bootstrap`. This plugin renames the binary cargo builds to `bootstrap` for you. You do **not** need to do this manually in your `Cargo.toml` configuration file.
 
 ## 🖍️ customize
 
@@ -61,12 +79,14 @@ custom:
 
 ### 🥼 (experimental) local builds
 
-While it's useful to have a build environment match your deployment
+While it's useful to have a build environment that matches your deployment
 environment, dockerized builds do come with some notable tradeoffs.
 
-The external dependency on docker itself often causes friction as an added dependency to your build. Depending on the docker image limited which versions of rust you could deploy with. The docker image tracked stable rust. Some users might wish to try unstable versions early. Local builds enable that.
+The external dependency on docker itself often causes friction as an added dependency to your build. 
 
-If you wish to build lambda's locally, this plugin also supports an experimental `dockerless` mode. 
+Depending on the docker image limits which versions of rust you can build with. The default docker image tracks **stable rust**. Some users might wish to try unstable versions of rust before the stabalize. Local builds enable that.
+
+If you wish to build lambda's locally, use the `dockerless` configuration setting. 
 
 ```diff
 custom:
@@ -79,7 +99,7 @@ custom:
 +   dockerless: true
 ```
 
-This will build and link your lambda as a static binary that can be deployed in to the lambda execution environment as a static binary using [MUSL](https://doc.rust-lang.org/edition-guide/rust-2018/platform-and-target-support/musl-support-for-fully-static-binaries.html).
+This will build and link your lambda as a static binary that can be deployed in to the lambda execution environment using [MUSL](https://doc.rust-lang.org/edition-guide/rust-2018/platform-and-target-support/musl-support-for-fully-static-binaries.html).
 
 In order to use this mode its expected that you install the `x86_64-unknown-linux-musl` target on all platforms locally with
 
