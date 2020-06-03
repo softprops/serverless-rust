@@ -102,7 +102,7 @@ $ brew install filosottile/musl-cross/musl-cross
 Using MUSL comes with some other notable tradeoffs. One of which is complications that arise when depending on dynamically linked dependencies.
 
 * With OpenSSL bindings which you can safely replace is with [rustls](https://github.com/ctz/rustls) or [vendor it](https://docs.rs/openssl/0.10.29/openssl/#vendored)
-* Other known issues have been reported with [backtrace](https://github.com/KodrAus/rust-cross-compile#limitations). 
+* Other limitations are noted [here](https://github.com/KodrAus/rust-cross-compile#limitations).
 
 If you find other MUSL specific issues, please reported them by [opening an issue](https://github.com/softprops/serverless-rust/issues/new?template=bug_report.md).
 
