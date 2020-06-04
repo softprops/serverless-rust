@@ -41,7 +41,7 @@ provider:
   name: aws
   runtime: rust
 plugins:
-  # this registered the plugin
+  # this registers the plugin
   # with serverless
   - serverless-rust
 # creates one artifact for each function
