@@ -23,13 +23,15 @@
 
 ## 📦 Install
 
-Install the plugin with npm
+Install the plugin inside your serverless project with npm.
 
 ```sh
 $ npm i -D serverless-rust
 ```
+💡The `-D` flag adds it to your development dependencies in npm speak
 
-💡 This serverless plugin assumes you are building Rustlang lambdas targeting the AWS Lambda "provided" runtime. The [AWS Lambda Rust Runtime](https://github.com/awslabs/aws-lambda-rust-runtime) makes this easy.
+
+💡 This plugin assumes you are building Rustlang lambdas targeting the AWS Lambda "provided" runtime. The [AWS Lambda Rust Runtime](https://github.com/awslabs/aws-lambda-rust-runtime) makes this easy.
 
 Add the following to your serverless project's `serverless.yml` file
 
@@ -39,8 +41,8 @@ provider:
   name: aws
   runtime: rust
 plugins:
-  # this adds informs serverless to use
-  # the serverless-rust plugin
+  # this registered the plugin
+  # with serverless
   - serverless-rust
 # creates one artifact for each function
 package:
@@ -66,7 +68,7 @@ a custom section of your serverless.yaml configuration
 
 ```yaml
 custom:
-  # this section allows for customization of the default
+  # this section customizes of the default
   # serverless-rust plugin settings
   rust:
     # flags passed to cargo
@@ -80,11 +82,11 @@ custom:
 ### 🥼 (experimental) local builds
 
 While it's useful to have a build environment that matches your deployment
-environment, dockerized builds do come with some notable tradeoffs.
+environment, dockerized builds come with some notable tradeoffs.
 
-The external dependency on docker itself often causes friction as an added dependency to your build. 
+The external dependency on docker itself often causes friction as an added dependency to your build.
 
-Depending on the docker image limits which versions of rust you can build with. The default docker image tracks **stable rust**. Some users might wish to try unstable versions of rust before the stabalize. Local builds enable that.
+Depending on a docker image limits which versions of rust you can build with. The default docker image tracks **stable rust**. Some users might wish to try unstable versions of rust before they stabilize. Local builds enable that.
 
 If you wish to build lambda's locally, use the `dockerless` configuration setting. 
 
@@ -99,7 +101,7 @@ custom:
 +   dockerless: true
 ```
 
-This will build and link your lambda as a static binary that can be deployed in to the lambda execution environment using [MUSL](https://doc.rust-lang.org/edition-guide/rust-2018/platform-and-target-support/musl-support-for-fully-static-binaries.html).
+This will build and link your lambda as a static binary outside a container that can be deployed in to the lambda execution environment using [MUSL](https://doc.rust-lang.org/edition-guide/rust-2018/platform-and-target-support/musl-support-for-fully-static-binaries.html). The aim is that in future releases, this might become the default behavior.
 
 In order to use this mode its expected that you install the `x86_64-unknown-linux-musl` target on all platforms locally with
 
@@ -124,7 +126,7 @@ Using MUSL comes with some other notable tradeoffs. One of which is complication
 * With OpenSSL bindings which you can safely replace is with [rustls](https://github.com/ctz/rustls) or [vendor it](https://docs.rs/openssl/0.10.29/openssl/#vendored)
 * Other limitations are noted [here](https://github.com/KodrAus/rust-cross-compile#limitations).
 
-If you find other MUSL specific issues, please reported them by [opening an issue](https://github.com/softprops/serverless-rust/issues/new?template=bug_report.md).
+If you find other MUSL specific issues, please report them by [opening an issue](https://github.com/softprops/serverless-rust/issues/new?template=bug_report.md).
 
 ### 🎨 Per function customization
 
@@ -176,7 +178,6 @@ $ npx serverless invoke -f hello -d '{"hello":"world"}'
 ```sh
 $ npx serverless logs -f hello
 ```
-
 
 ## 🏗️ serverless templates
 
