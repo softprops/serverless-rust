@@ -30,7 +30,6 @@ $ npm i -D serverless-rust
 ```
 💡The `-D` flag adds it to your development dependencies in npm speak
 
-
 💡 This plugin assumes you are building Rustlang lambdas targeting the AWS Lambda "provided" runtime. The [AWS Lambda Rust Runtime](https://github.com/awslabs/aws-lambda-rust-runtime) makes this easy.
 
 Add the following to your serverless project's `serverless.yml` file
@@ -60,6 +59,8 @@ functions:
 ```
 
 > 💡 The Rust Lambda runtime requires a binary named `bootstrap`. This plugin renames the binary cargo builds to `bootstrap` for you. You do **not** need to do this manually in your `Cargo.toml` configuration file.
+
+The default behavior is to build your lambda inside a docker container. Make sure you have a docker daemon running if you are not opting into the dockerless mode.
 
 ## 🖍️ customize
 
