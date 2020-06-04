@@ -4,10 +4,10 @@
   "description": "Serverless framework plugin for Rustlang applications",
   "main": "index.js",
   "scripts": {
-    "lint": "npx prettier --check '**.js'",
+    "lint": "npx prettier --check '**.js' '!coverage' ",
     "test": "npx jest --collectCoverage",
     "test:integration": "./tests/integration/test.sh",
-    "fmt": "npx prettier --write '**.js'"
+    "fmt": "npx prettier --write '**.js' '!coverage' "
   },
   "repository": {
     "type": "git",
