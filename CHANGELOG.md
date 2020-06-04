@@ -1,14 +1,14 @@
-# ⚡ 0.4.0 (unreleased)
+# ⚡ 0.3.8s
 
 * experimental dockerless mode! To enable local builds add the following to your `serverless.yml` file
 
-```yml
+```diff
 custom:
   rust:
-    dockerless: true
++    dockerless: true
 ```
 
-This comes with some new expectations about your local environment. Please see the readme section on local builds for more information.
+This comes with some new added expectations about your local environment. Please see the readme section on local builds for more information.
 
 * bump [lambda-rust](https://hub.docker.com/r/softprops/lambda-rust/) docker version to `0.2.7-rust-1.43.1`
 * The docker image used to build artifacts is now configurable though the `custom.rust.dockerImage` `serverless.yml` config setting. The default remains `softprops/lambda-rust` [#65](https://github.com/softprops/serverless-rust/pull/65)
