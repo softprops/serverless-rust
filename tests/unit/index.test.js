@@ -36,7 +36,7 @@ describe("RustPlugin", () => {
     assert.deepEqual(unconfigured.custom, {
       cargoFlags: "",
       dockerImage: "softprops/lambda-rust",
-      dockerTag: "0.2.7-rust-1.43.1",
+      dockerTag: "latest",
       dockerless: false,
     });
   });
@@ -50,7 +50,7 @@ describe("RustPlugin", () => {
             rust: {
               cargoFlags: "--features foo",
               dockerImage: "notsoftprops/lambda-rust",
-              dockerTag: "latest",
+              dockerTag: "custom-tag",
               dockerless: true,
             },
           },
@@ -63,7 +63,7 @@ describe("RustPlugin", () => {
     assert.deepEqual(configured.custom, {
       cargoFlags: "--features foo",
       dockerImage: "notsoftprops/lambda-rust",
-      dockerTag: "latest",
+      dockerTag: "custom-tag",
       dockerless: true,
     });
   });

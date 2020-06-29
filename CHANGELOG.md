@@ -1,4 +1,8 @@
-# ⚡ 0.3.8s
+# ⚡ 0.4.0 (unreleased)
+
+* use `latest` docker tag by default. This reduces some of the maintenance in publishing this plugin. Users are still able to pin versions as they always have.
+
+# ⚡ 0.3.8
 
 * experimental dockerless mode! To enable local builds add the following to your `serverless.yml` file
 

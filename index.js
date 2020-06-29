@@ -10,7 +10,7 @@ const path = require("path");
 const AdmZip = require("adm-zip");
 const { mkdirSync, writeFileSync, readFileSync } = require("fs");
 
-const DEFAULT_DOCKER_TAG = "0.2.7-rust-1.43.1";
+const DEFAULT_DOCKER_TAG = "latest";
 const DEFAULT_DOCKER_IMAGE = "softprops/lambda-rust";
 const RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided";
