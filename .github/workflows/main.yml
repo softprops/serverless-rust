@@ -53,7 +53,7 @@ jobs:
         with:
           path: lambdas
       - name: List Lambdas
-        run: ls -alh lambdas/
+        run: ls -alh lambdas/**/*
       - name: Run macos-latest-lambda
         run: |
           echo "running macos-latest-lambda"

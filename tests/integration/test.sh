@@ -32,7 +32,8 @@ for project in test-func test-func-dev; do
     # verify packaged artifact by invoking it using the lambdaci "provided" docker image
     unzip -o  \
         target/lambda/"${target}"/test-func.zip \
-        -d /tmp/lambda > /dev/null 2>&1 && \
+        -d /tmp/lambda > /dev/null 2>&1
+    ls -al /tmp/lambda
     ${SLS_DOCKER_CLI:-docker} run \
         -i --rm \
         -e DOCKER_LAMBDA_USE_STDIN=1 \
