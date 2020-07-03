@@ -61,6 +61,7 @@ jobs:
           unzip -o  \
             lambdas/macos-latest-lambda/test-func.zip \
             -d /tmp/macos-latest-lambda
+          ls -alh /tmp/macos-latest-lambda
           docker run \
             -i --rm \
             -v /tmp/macos-latest-lambda:/var/task:ro,delegated \
@@ -72,6 +73,7 @@ jobs:
           unzip -o  \
             lambdas/windows-latest-lambda/test-func.zip \
             -d /tmp/windows-latest-lambda
+          ls -alh /tmp/windows-latest-lambda
           docker run \
             -i --rm \
             -v /tmp/windows-latest-lambda:/var/task:ro,delegated \
@@ -83,6 +85,7 @@ jobs:
           unzip -o  \
             lambdas/ubuntu-latest-lambda/test-func.zip \
             -d /tmp/ubuntu-latest-lambda
+          ls -alh /tmp/ubuntu-latest-lambda
           docker run \
             -i --rm \
             -v /tmp/ubuntu-latest-lambda:/var/task:ro,delegated \
