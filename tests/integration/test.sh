@@ -44,6 +44,7 @@ for project in test-func test-func-dev; do
         | grep -v '^\W*$' \
         > test-out.log
 
+    cat test-out.log
     assert_success "when invoked, it produces expected output" \
         diff test-event.json test-out.log
 
