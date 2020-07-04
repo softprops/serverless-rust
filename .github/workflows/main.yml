@@ -37,7 +37,7 @@ jobs:
         shell: bash
         run: |
           cd tests/integration/test-func
-          npm ci -D ../../.. --silent
+          npm i -D ../../.. --silent
           npx serverless package
       - name: Upload artifact
         uses: actions/upload-artifact@v1
