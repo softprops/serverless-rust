@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Install
         run: npm ci
       - name: Lint
@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Setup Rust
         uses: hecrj/setup-rust-action@v1
         with:
@@ -37,7 +37,7 @@ jobs:
         shell: bash
         run: |
           cd tests/integration/test-func
-          npm ci -D ../../.. --silent
+          npm i -D ../../.. --silent
           npx serverless package
       - name: Upload artifact
         uses: actions/upload-artifact@v1
@@ -53,7 +53,7 @@ jobs:
         with:
           path: lambdas
       - name: List Lambdas
-        run: ls -alh lambdas/
+        run: ls -alh lambdas/**/*
       - name: Run macos-latest-lambda
         run: |
           echo "running macos-latest-lambda"
@@ -61,6 +61,7 @@ jobs:
           unzip -o  \
             lambdas/macos-latest-lambda/test-func.zip \
             -d /tmp/macos-latest-lambda
+          ls -alh /tmp/macos-latest-lambda
           docker run \
             -i --rm \
             -v /tmp/macos-latest-lambda:/var/task:ro,delegated \
@@ -72,6 +73,7 @@ jobs:
           unzip -o  \
             lambdas/windows-latest-lambda/test-func.zip \
             -d /tmp/windows-latest-lambda
+          ls -alh /tmp/windows-latest-lambda
           docker run \
             -i --rm \
             -v /tmp/windows-latest-lambda:/var/task:ro,delegated \
@@ -83,6 +85,7 @@ jobs:
           unzip -o  \
             lambdas/ubuntu-latest-lambda/test-func.zip \
             -d /tmp/ubuntu-latest-lambda
+          ls -alh /tmp/ubuntu-latest-lambda
           docker run \
             -i --rm \
             -v /tmp/ubuntu-latest-lambda:/var/task:ro,delegated \
@@ -96,7 +99,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Setup Rust
         uses: hecrj/setup-rust-action@v1
         with:
@@ -113,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Publish
         if: startsWith(github.ref, 'refs/tags/')
         run: |

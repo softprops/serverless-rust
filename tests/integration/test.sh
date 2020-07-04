@@ -23,7 +23,7 @@ for project in test-func test-func-dev; do
 
     # install build deps
     assert_success "it installs with npm" \
-        npm ci -D "$DIST" --silent
+        npm i -D "$DIST" --silent
 
     # integration test `package` command
     assert_success "it packages with serverless" \
@@ -32,7 +32,8 @@ for project in test-func test-func-dev; do
     # verify packaged artifact by invoking it using the lambdaci "provided" docker image
     unzip -o  \
         target/lambda/"${target}"/test-func.zip \
-        -d /tmp/lambda > /dev/null 2>&1 && \
+        -d /tmp/lambda > /dev/null 2>&1
+    ls -al /tmp/lambda
     ${SLS_DOCKER_CLI:-docker} run \
         -i --rm \
         -e DOCKER_LAMBDA_USE_STDIN=1 \
@@ -43,6 +44,7 @@ for project in test-func test-func-dev; do
         | grep -v '^\W*$' \
         > test-out.log
 
+    cat test-out.log
     assert_success "when invoked, it produces expected output" \
         diff test-event.json test-out.log
 
