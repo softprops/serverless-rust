@@ -23,7 +23,7 @@ for project in test-func test-func-dev; do
 
     # install build deps
     assert_success "it installs with npm" \
-        npm ci -D "$DIST" --silent
+        npm i -D "$DIST" --silent
 
     # integration test `package` command
     assert_success "it packages with serverless" \
