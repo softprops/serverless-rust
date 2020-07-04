@@ -149,7 +149,7 @@ class RustPlugin {
       "bootstrap",
       readFileSync(path.join(sourceDir, binary)),
       "",
-      0755
+      0o755
     );
     const targetDir = this.localArtifactDir(profile);
     try {
