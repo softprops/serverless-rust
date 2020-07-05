@@ -26,6 +26,8 @@ describe("RustPlugin", () => {
     assert.deepEqual(Object.keys(plugin.hooks), [
       "before:package:createDeploymentArtifacts",
       "before:deploy:function:packageFunction",
+      "before:offline:start",
+      "before:offline:start:init",
     ]);
   });
   it("sets sensible defaults", () => {
