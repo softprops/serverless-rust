@@ -35,6 +35,8 @@ class RustPlugin {
     this.hooks = {
       "before:package:createDeploymentArtifacts": this.build.bind(this),
       "before:deploy:function:packageFunction": this.build.bind(this),
+      "before:offline:start": this.build.bind(this),
+      "before:offline:start:init": this.build.bind(this),
     };
     if (includeInvokeHook(serverless.version)) {
       this.hooks["before:invoke:local:invoke"] = this.build.bind(this);
