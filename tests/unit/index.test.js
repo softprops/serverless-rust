@@ -227,6 +227,7 @@ describe("RustPlugin", () => {
         "foo",
         "bar",
         "release",
+        false,
         "source_path",
         "cargo_registry",
         "cargo_downloads",
@@ -246,6 +247,42 @@ describe("RustPlugin", () => {
         "cargo_downloads:/root/.cargo/git",
         "-e",
         "PROFILE=release",
+        "-e",
+        "CARGO_FLAGS=--features foo -p foo",
+        "notsoftprops/lambda-rust:latest",
+      ]
+    );
+  });
+
+  it("configures expected dockerBuildArgs with debugInfo", () => {
+    assert.deepEqual(
+      plugin.dockerBuildArgs(
+        {},
+        "foo",
+        "bar",
+        "release",
+        true,
+        "source_path",
+        "cargo_registry",
+        "cargo_downloads",
+        {}
+      ),
+      [
+        "run",
+        "--rm",
+        "-t",
+        "-e",
+        "BIN=bar",
+        "-v",
+        "source_path:/code",
+        "-v",
+        "cargo_registry:/root/.cargo/registry",
+        "-v",
+        "cargo_downloads:/root/.cargo/git",
+        "-e",
+        "PROFILE=release",
+        "-e",
+        "DEBUGINFO=true",
         "-e",
         "CARGO_FLAGS=--features foo -p foo",
         "notsoftprops/lambda-rust:latest",

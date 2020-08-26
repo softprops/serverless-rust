@@ -174,6 +174,7 @@ class RustPlugin {
     cargoPackage,
     binary,
     profile,
+    debugInfo,
     srcPath,
     cargoRegistry,
     cargoDownloads,
@@ -198,6 +199,9 @@ class RustPlugin {
       // release or dev
       customArgs.push("-e", `PROFILE=${profile}`);
     }
+    if (debugInfo) {
+      customArgs.push("-e", `DEBUGINFO=${debugInfo}`);
+    }
     if (cargoPackage != undefined) {
       if (cargoFlags) {
         cargoFlags = `${cargoFlags} -p ${cargoPackage}`;
@@ -219,7 +223,7 @@ class RustPlugin {
     ].filter((i) => i);
   }
 
-  dockerBuild(funcArgs, cargoPackage, binary, profile) {
+  dockerBuild(funcArgs, cargoPackage, binary, profile, debugInfo) {
     const cargoHome = process.env.CARGO_HOME || path.join(homedir(), ".cargo");
     const cargoRegistry = path.join(cargoHome, "registry");
     const cargoDownloads = path.join(cargoHome, "git");
@@ -230,6 +234,7 @@ class RustPlugin {
       cargoPackage,
       binary,
       profile,
+      debugInfo,
       this.srcPath,
       cargoRegistry,
       cargoDownloads,
@@ -280,10 +285,11 @@ class RustPlugin {
 
       this.serverless.cli.log(`Building Rust ${func.handler} func...`);
       let profile = (func.rust || {}).profile || this.custom.profile;
+      let debugInfo = (func.rust || {}).debugInfo || this.custom.debugInfo;
 
       const res = this.buildLocally(func)
         ? this.localBuild(func.rust, cargoPackage, binary, profile)
-        : this.dockerBuild(func.rust, cargoPackage, binary, profile);
+        : this.dockerBuild(func.rust, cargoPackage, binary, profile, debugInfo);
       if (res.error || res.status > 0) {
         this.serverless.cli.log(
           `Rust build encountered an error: ${res.error} ${res.status}.`
