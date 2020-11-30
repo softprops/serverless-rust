@@ -186,11 +186,11 @@ class RustPlugin {
       "-e",
       `BIN=${binary}`,
       `-v`,
-      `${srcPath}:/code`,
+      `${srcPath}:/code:Z`,
       `-v`,
-      `${cargoRegistry}:/root/.cargo/registry`,
+      `${cargoRegistry}:/root/.cargo/registry:Z`,
       `-v`,
-      `${cargoDownloads}:/root/.cargo/git`,
+      `${cargoDownloads}:/root/.cargo/git:Z`,
     ];
     const customArgs = (env["SLS_DOCKER_ARGS"] || "").split(" ") || [];
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
