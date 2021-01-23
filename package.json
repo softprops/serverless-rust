@@ -31,7 +31,7 @@
     "serverless": "^1.71.3"
   },
   "devDependencies": {
-    "adm-zip": "^0.4.14",
+    "adm-zip": "^0.5.1",
     "jest": "^26.0.1",
     "jest-circus": "^26.0.1",
     "prettier": "^2.0.5"
