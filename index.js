@@ -188,9 +188,9 @@ class RustPlugin {
       `-v`,
       `${srcPath}:/code`,
       `-v`,
-      `${cargoRegistry}:/root/.cargo/registry`,
+      `${cargoRegistry}:/cargo/registry`,
       `-v`,
-      `${cargoDownloads}:/root/.cargo/git`,
+      `${cargoDownloads}:/cargo/git`,
     ];
     const customArgs = (env["SLS_DOCKER_ARGS"] || "").split(" ") || [];
     let cargoFlags = (funcArgs || {}).cargoFlags || this.custom.cargoFlags;
