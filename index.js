@@ -74,7 +74,7 @@ class RustPlugin {
       ""
     ).split(/\s+/);
     const targetArgs = MUSL_PLATFORMS.includes(platform)
-      ? ["--target", "x86_64-unknown-linux-musl"]
+      ? ["--target", "x86_64-unknown-linux-gnu"]
       : [];
     return [
       ...defaultArgs,
@@ -96,9 +96,9 @@ class RustPlugin {
         : "darwin" === platform
         ? {
             RUSTFLAGS:
-              (env["RUSTFLAGS"] || "") + " -Clinker=x86_64-linux-musl-gcc",
-            TARGET_CC: "x86_64-linux-musl-gcc",
-            CC_x86_64_unknown_linux_musl: "x86_64-linux-musl-gcc",
+              (env["RUSTFLAGS"] || "") + " -Clinker=x86_64-linux-gnu-gcc",
+            TARGET_CC: "x86_64-linux-gnu-gcc",
+            CC_x86_64_unknown_linux_musl: "x86_64-linux-gnu-gcc",
           }
         : {};
     return {
@@ -110,7 +110,7 @@ class RustPlugin {
   localSourceDir(profile, platform) {
     let executable = "target";
     if (MUSL_PLATFORMS.includes(platform)) {
-      executable = path.join(executable, "x86_64-unknown-linux-musl");
+      executable = path.join(executable, "x86_64-unknown-linux-gnu");
     }
     return path.join(executable, profile !== "dev" ? "release" : "debug");
   }
