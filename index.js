@@ -12,7 +12,8 @@ const { mkdirSync, writeFileSync, readFileSync } = require("fs");
 
 const DEFAULT_DOCKER_TAG = "latest";
 const DEFAULT_DOCKER_IMAGE = "softprops/lambda-rust";
-const RUST_RUNTIME = "rust";
+const RUST_RUNTIME = ["rust", "provided.al2"];
+const LEGACY_RUST_RUNTIME = "rust";
 const BASE_RUNTIME = "provided.al2";
 const NO_OUTPUT_CAPTURE = { stdio: ["ignore", process.stdout, process.stderr] };
 const MUSL_PLATFORMS = ["darwin", "win32", "linux"];
@@ -271,9 +272,12 @@ class RustPlugin {
     this.functions().forEach((funcName) => {
       const func = service.getFunction(funcName);
       const runtime = func.runtime || service.provider.runtime;
-      if (runtime != RUST_RUNTIME) {
+      if (!(RUST_RUNTIME.includes(runtime) && (this.custom.rust || func.rust))) {
         // skip functions which don't apply to rust
         return;
+      }
+      if (runtime === LEGACY_RUST_RUNTIME) {
+        this.serverless.cli.warn(`"${LEGACY_RUST_RUNTIME}" for "provider.runtime" is deprecated. Check how to migrate on https://github.com/softprops/serverless-rust`);
       }
       rustFunctionsFound = true;
       const { cargoPackage, binary } = this.cargoBinary(func);
