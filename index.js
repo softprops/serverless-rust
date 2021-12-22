@@ -236,7 +236,7 @@ class RustPlugin {
       process.env
     );
 
-    this.serverless.cli.log("Running containerized build");
+    this.serverless.cli.log(`Running containerized build, ${args}`);
 
     return spawnSync(dockerCLI, args, NO_OUTPUT_CAPTURE);
   }
@@ -267,60 +267,56 @@ class RustPlugin {
     if (service.provider.name != "aws") {
       return;
     }
-    let rustFunctionsFound = false;
-    this.functions().forEach((funcName) => {
-      const func = service.getFunction(funcName);
-      const runtime = func.runtime || service.provider.runtime;
-      if (runtime != RUST_RUNTIME) {
-        // skip functions which don't apply to rust
-        return;
-      }
-      rustFunctionsFound = true;
-      const { cargoPackage, binary } = this.cargoBinary(func);
+    
+		const binary = this.functions().map((funcName) => {
+			const func = service.getFunction(funcName);
+			return this.cargoBinary(func).binary;
+		}).reduce((p, n) => `${p}|${n}`);
 
-      this.serverless.cli.log(`Building Rust ${func.handler} func...`);
-      let profile = (func.rust || {}).profile || this.custom.profile;
+		// let profile = (func.rust || {}).profile || this.custom.profile;
+		const profile = undefined;
 
-      const res = this.buildLocally(func)
-        ? this.localBuild(func.rust, cargoPackage, binary, profile)
-        : this.dockerBuild(func.rust, cargoPackage, binary, profile);
-      if (res.error || res.status > 0) {
-        this.serverless.cli.log(
-          `Rust build encountered an error: ${res.error} ${res.status}.`
-        );
-        throw new Error(res.error);
-      }
-      // If all went well, we should now have find a packaged compiled binary under `target/lambda/release`.
-      //
-      // The AWS "provided" lambda runtime requires executables to be named
-      // "bootstrap" -- https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html
-      //
-      // To avoid artifact naming conflicts when we potentially have more than one function
-      // we leverage the ability to declare a package artifact directly
-      // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
-      // for more information
-      const artifactPath = path.join(
-        this.srcPath,
-        `target/lambda/${"dev" === profile ? "debug" : "release"}`,
-        `${binary}.zip`
-      );
-      func.package = func.package || {};
-      func.package.artifact = artifactPath;
+		const res = this.dockerBuild({}, 'pass', binary, profile);
 
-      // Ensure the runtime is set to a sane value for other plugins
-      if (func.runtime == RUST_RUNTIME) {
-        func.runtime = BASE_RUNTIME;
-      }
-    });
+		// const res = this.buildLocally(func)
+		// 	? this.localBuild(func.rust, cargoPackage, binary, profile)
+		// 	: this.dockerBuild(func.rust, cargoPackage, binary, profile);
+		if (res.error || res.status > 0) {
+			this.serverless.cli.log(
+				`Rust build encountered an error: ${res.error} ${res.status}.`
+			);
+			throw new Error(res.error);
+		}
+		// If all went well, we should now have find a packaged compiled binary under `target/lambda/release`.
+		//
+		// The AWS "provided" lambda runtime requires executables to be named
+		// "bootstrap" -- https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html
+		//
+		// To avoid artifact naming conflicts when we potentially have more than one function
+		// we leverage the ability to declare a package artifact directly
+		// see https://serverless.com/framework/docs/providers/aws/guide/packaging/
+		// for more information
+
+		this.functions().forEach((funcName) => {
+			const func = service.getFunction(funcName);
+			let binary = this.cargoBinary(func).binary;
+			const artifactPath = path.join(
+				this.srcPath,
+				`target/lambda/${"dev" === profile ? "debug" : "release"}`,
+				`${binary}.zip`
+			);
+			func.package = func.package || {};
+			func.package.artifact = artifactPath;
+
+			if (func.runtime == RUST_RUNTIME) {
+				func.runtime = BASE_RUNTIME;
+			}
+
+		});
+
+		// Ensure the runtime is set to a sane value for other plugins
     if (service.provider.runtime === RUST_RUNTIME) {
       service.provider.runtime = BASE_RUNTIME;
-    }
-    if (!rustFunctionsFound) {
-      throw new Error(
-        `Error: no Rust functions found. ` +
-          `Use 'runtime: ${RUST_RUNTIME}' in global or ` +
-          `function configuration to use this plugin.`
-      );
     }
   }
 }
