@@ -73,9 +73,16 @@ class RustPlugin {
       this.custom.cargoFlags ||
       ""
     ).split(/\s+/);
-    const targetArgs = MUSL_PLATFORMS.includes(platform)
-      ? ["--target", "x86_64-unknown-linux-musl"]
-      : [];
+
+
+    let target = (funcArgs || {}).target || this.custom.target
+
+    const targetArgs = 
+      target ?
+        ['--target', target]
+        : MUSL_PLATFORMS.includes(platform)
+          ? ["--target", "x86_64-unknown-linux-musl"]
+          : [];
     return [
       ...defaultArgs,
       ...profileArgs,
@@ -84,33 +91,44 @@ class RustPlugin {
     ].filter((i) => i);
   }
 
-  localBuildEnv(env, platform) {
+  localBuildEnv(funcArgs, env, platform) {
     const defaultEnv = { ...env };
+
+    let target = (funcArgs || {}).target || this.custom.target
+    let linker = (funcArgs || {}).linker || this.custom.linker
+
     const platformEnv =
-      "win32" === platform
-        ? {
-            RUSTFLAGS: (env["RUSTFLAGS"] || "") + " -Clinker=rust-lld",
-            TARGET_CC: "rust-lld",
-            CC_x86_64_unknown_linux_musl: "rust-lld",
-          }
-        : "darwin" === platform
-        ? {
-            RUSTFLAGS:
-              (env["RUSTFLAGS"] || "") + " -Clinker=x86_64-linux-musl-gcc",
-            TARGET_CC: "x86_64-linux-musl-gcc",
-            CC_x86_64_unknown_linux_musl: "x86_64-linux-musl-gcc",
-          }
-        : {};
+      linker ?
+        {
+          RUSTFLAGS: (env["RUSTFLAGS"] || "") + ` -Clinker=${linker}`,
+          TARGET_CC: linker,
+          [`CC_${target || 'x86_64_unknown_linux_musl'}`]: linker,
+        }
+        : "win32" === platform
+          ? {
+              RUSTFLAGS: (env["RUSTFLAGS"] || "") + " -Clinker=rust-lld",
+              TARGET_CC: "rust-lld",
+              CC_x86_64_unknown_linux_musl: "rust-lld",
+            }
+          : "darwin" === platform
+            ? {
+                RUSTFLAGS:
+                  (env["RUSTFLAGS"] || "") + " -Clinker=x86_64-linux-musl-gcc",
+                TARGET_CC: "x86_64-linux-musl-gcc",
+                CC_x86_64_unknown_linux_musl: "x86_64-linux-musl-gcc",
+              }
+            : {};
     return {
       ...defaultEnv,
       ...platformEnv,
     };
   }
 
-  localSourceDir(profile, platform) {
+  localSourceDir(funcArgs, profile, platform) {
     let executable = "target";
     if (MUSL_PLATFORMS.includes(platform)) {
-      executable = path.join(executable, "x86_64-unknown-linux-musl");
+      let target = (funcArgs || {}).target || this.custom.target
+      executable = path.join(executable, target ? target : "x86_64-unknown-linux-musl");
     }
     return path.join(executable, profile !== "dev" ? "release" : "debug");
   }
@@ -132,7 +150,7 @@ class RustPlugin {
       platform()
     );
 
-    const env = this.localBuildEnv(process.env, platform());
+    const env = this.localBuildEnv(funcArgs, process.env, platform());
     this.serverless.cli.log(`Running local cargo build on ${platform()}`);
 
     const buildResult = spawnSync("cargo", args, {
@@ -145,7 +163,7 @@ class RustPlugin {
       return buildResult;
     }
     // now rename binary and zip
-    const sourceDir = this.localSourceDir(profile, platform());
+    const sourceDir = this.localSourceDir(funcArgs, profile, platform());
     const zip = new AdmZip();
     zip.addFile(
       "bootstrap",
