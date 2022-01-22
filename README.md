@@ -100,7 +100,14 @@ custom:
     cargoFlags: '--features enable-awesome'
     # experimental! when set to true, artifacts are built locally outside of docker
 +   dockerless: true
+
+    # when using local builds (dockerless), optionally provide a different target and linker for the compiler
+    # for example, allow local running on ARM macs
+    target: aarch64-apple-darwin
+    linker: clang
 ```
+
+The following assumes that you have not specified a different target or linker. If you do, make sure have that you have installed the specified target (via `rustup`) and linker.
 
 This will build and link your lambda as a static binary outside a container that can be deployed in to the lambda execution environment using [MUSL](https://doc.rust-lang.org/edition-guide/rust-2018/platform-and-target-support/musl-support-for-fully-static-binaries.html). The aim is that in future releases, this might become the default behavior.
 
