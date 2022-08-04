@@ -40,6 +40,7 @@ describe("RustPlugin", () => {
       dockerImage: "softprops/lambda-rust",
       dockerTag: "latest",
       dockerless: false,
+      inWorkspace: false
     });
   });
 
@@ -54,6 +55,7 @@ describe("RustPlugin", () => {
               dockerImage: "notsoftprops/lambda-rust",
               dockerTag: "custom-tag",
               dockerless: true,
+              inWorkspace: false
             },
           },
           package: {},
@@ -67,6 +69,7 @@ describe("RustPlugin", () => {
       dockerImage: "notsoftprops/lambda-rust",
       dockerTag: "custom-tag",
       dockerless: true,
+      inWorkspace: false
     });
   });
 
