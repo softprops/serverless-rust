@@ -13,6 +13,7 @@ describe("RustPlugin", () => {
             dockerImage: "notsoftprops/lambda-rust",
             dockerTag: "latest",
             dockerless: true,
+            strictMode: true,
           },
         },
         package: {},
@@ -40,6 +41,7 @@ describe("RustPlugin", () => {
       dockerImage: "softprops/lambda-rust",
       dockerTag: "latest",
       dockerless: false,
+      strictMode: true,
     });
   });
 
@@ -54,6 +56,7 @@ describe("RustPlugin", () => {
               dockerImage: "notsoftprops/lambda-rust",
               dockerTag: "custom-tag",
               dockerless: true,
+              strictMode: false,
             },
           },
           package: {},
@@ -67,6 +70,7 @@ describe("RustPlugin", () => {
       dockerImage: "notsoftprops/lambda-rust",
       dockerTag: "custom-tag",
       dockerless: true,
+      strictMode: false,
     });
   });
 
@@ -128,9 +132,13 @@ describe("RustPlugin", () => {
   });
 
   it("configures expected localBuildEnv", () => {
-    assert.deepEqual(plugin.localBuildEnv({}, "linux"), {}, "failed on linux");
     assert.deepEqual(
-      plugin.localBuildEnv({}, "darwin"),
+      plugin.localBuildEnv({}, {}, "linux"),
+      {},
+      "failed on linux"
+    );
+    assert.deepEqual(
+      plugin.localBuildEnv({}, {}, "darwin"),
 
       {
         CC_x86_64_unknown_linux_musl: "x86_64-linux-musl-gcc",
@@ -140,7 +148,7 @@ describe("RustPlugin", () => {
       "failed on osx"
     );
     assert.deepEqual(
-      plugin.localBuildEnv({}, "win32"),
+      plugin.localBuildEnv({}, {}, "win32"),
       {
         CC_x86_64_unknown_linux_musl: "rust-lld",
         RUSTFLAGS: " -Clinker=rust-lld",
@@ -152,32 +160,32 @@ describe("RustPlugin", () => {
 
   it("configures expected localSourceDir", () => {
     assert.equal(
-      plugin.localSourceDir("dev", "linux"),
+      plugin.localSourceDir({}, "dev", "linux"),
       path.join("target", "x86_64-unknown-linux-musl", "debug"),
       "failed on linux"
     );
     assert.equal(
-      plugin.localSourceDir("release", "linux"),
+      plugin.localSourceDir({}, "release", "linux"),
       path.join("target", "x86_64-unknown-linux-musl", "release"),
       "failed on linux"
     );
     assert.equal(
-      plugin.localSourceDir("dev", "darwin"),
+      plugin.localSourceDir({}, "dev", "darwin"),
       path.join("target", "x86_64-unknown-linux-musl", "debug"),
       "failed on osx"
     );
     assert.equal(
-      plugin.localSourceDir("release", "darwin"),
+      plugin.localSourceDir({}, "release", "darwin"),
       path.join("target", "x86_64-unknown-linux-musl", "release"),
       "failed on osx"
     );
     assert.equal(
-      plugin.localSourceDir("dev", "win32"),
+      plugin.localSourceDir({}, "dev", "win32"),
       path.join("target", "x86_64-unknown-linux-musl", "debug"),
       "failed on windows"
     );
     assert.equal(
-      plugin.localSourceDir("release", "win32"),
+      plugin.localSourceDir({}, "release", "win32"),
       path.join("target", "x86_64-unknown-linux-musl", "release"),
       "failed on windows"
     );

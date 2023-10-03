@@ -75,15 +75,13 @@ class RustPlugin {
       ""
     ).split(/\s+/);
 
+    let target = (funcArgs || {}).target || this.custom.target;
 
-    let target = (funcArgs || {}).target || this.custom.target
-
-    const targetArgs = 
-      target ?
-        ['--target', target]
-        : MUSL_PLATFORMS.includes(platform)
-          ? ["--target", "x86_64-unknown-linux-musl"]
-          : [];
+    const targetArgs = target
+      ? ["--target", target]
+      : MUSL_PLATFORMS.includes(platform)
+      ? ["--target", "x86_64-unknown-linux-musl"]
+      : [];
     return [
       ...defaultArgs,
       ...profileArgs,
@@ -95,30 +93,29 @@ class RustPlugin {
   localBuildEnv(funcArgs, env, platform) {
     const defaultEnv = { ...env };
 
-    let target = (funcArgs || {}).target || this.custom.target
-    let linker = (funcArgs || {}).linker || this.custom.linker
+    let target = (funcArgs || {}).target || this.custom.target;
+    let linker = (funcArgs || {}).linker || this.custom.linker;
 
-    const platformEnv =
-      linker ?
-        {
+    const platformEnv = linker
+      ? {
           RUSTFLAGS: (env["RUSTFLAGS"] || "") + ` -Clinker=${linker}`,
           TARGET_CC: linker,
-          [`CC_${target || 'x86_64_unknown_linux_musl'}`]: linker,
+          [`CC_${target || "x86_64_unknown_linux_musl"}`]: linker,
         }
-        : "win32" === platform
-          ? {
-              RUSTFLAGS: (env["RUSTFLAGS"] || "") + " -Clinker=rust-lld",
-              TARGET_CC: "rust-lld",
-              CC_x86_64_unknown_linux_musl: "rust-lld",
-            }
-          : "darwin" === platform
-            ? {
-                RUSTFLAGS:
-                  (env["RUSTFLAGS"] || "") + " -Clinker=x86_64-linux-musl-gcc",
-                TARGET_CC: "x86_64-linux-musl-gcc",
-                CC_x86_64_unknown_linux_musl: "x86_64-linux-musl-gcc",
-              }
-            : {};
+      : "win32" === platform
+      ? {
+          RUSTFLAGS: (env["RUSTFLAGS"] || "") + " -Clinker=rust-lld",
+          TARGET_CC: "rust-lld",
+          CC_x86_64_unknown_linux_musl: "rust-lld",
+        }
+      : "darwin" === platform
+      ? {
+          RUSTFLAGS:
+            (env["RUSTFLAGS"] || "") + " -Clinker=x86_64-linux-musl-gcc",
+          TARGET_CC: "x86_64-linux-musl-gcc",
+          CC_x86_64_unknown_linux_musl: "x86_64-linux-musl-gcc",
+        }
+      : {};
     return {
       ...defaultEnv,
       ...platformEnv,
@@ -128,8 +125,11 @@ class RustPlugin {
   localSourceDir(funcArgs, profile, platform) {
     let executable = "target";
     if (MUSL_PLATFORMS.includes(platform)) {
-      let target = (funcArgs || {}).target || this.custom.target
-      executable = path.join(executable, target ? target : "x86_64-unknown-linux-musl");
+      let target = (funcArgs || {}).target || this.custom.target;
+      executable = path.join(
+        executable,
+        target ? target : "x86_64-unknown-linux-musl"
+      );
     }
     return path.join(executable, profile !== "dev" ? "release" : "debug");
   }
@@ -301,19 +301,21 @@ class RustPlugin {
 
       func.package = func.package || {};
       if (func.package.artifact && func.package.artifact !== "") {
-        this.serverless.cli.log(`Artifact defined for ${func.handler}, skipping build...`);
+        this.serverless.cli.log(
+          `Artifact defined for ${func.handler}, skipping build...`
+        );
       } else {
-        const {cargoPackage, binary} = this.cargoBinary(func);
+        const { cargoPackage, binary } = this.cargoBinary(func);
 
         this.serverless.cli.log(`Building Rust ${func.handler} func...`);
         let profile = (func.rust || {}).profile || this.custom.profile;
 
         const res = this.buildLocally(func)
-            ? this.localBuild(func.rust, cargoPackage, binary, profile)
-            : this.dockerBuild(func.rust, cargoPackage, binary, profile);
+          ? this.localBuild(func.rust, cargoPackage, binary, profile)
+          : this.dockerBuild(func.rust, cargoPackage, binary, profile);
         if (res.error || res.status > 0) {
           this.serverless.cli.log(
-              `Rust build encountered an error: ${res.error} ${res.status}.`
+            `Rust build encountered an error: ${res.error} ${res.status}.`
           );
           throw new Error(res.error);
         }
@@ -327,9 +329,9 @@ class RustPlugin {
         // see https://serverless.com/framework/docs/providers/aws/guide/packaging/
         // for more information
         const artifactPath = path.join(
-            this.srcPath,
-            `target/lambda/${"dev" === profile ? "debug" : "release"}`,
-            `${binary}.zip`
+          this.srcPath,
+          `target/lambda/${"dev" === profile ? "debug" : "release"}`,
+          `${binary}.zip`
         );
         func.package = func.package || {};
         func.package.artifact = artifactPath;
